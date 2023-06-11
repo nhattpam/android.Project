@@ -133,6 +133,13 @@ public class CartActivity extends AppCompatActivity {
     private void updateCartUI() {
         double totalPrice = calculateTotalPrice();
         tvTotalPrice.setText(String.format("Total Price: $%.2f", totalPrice));
+
+        // Disable the checkout button if the cart is empty
+        if (cartList.isEmpty()) {
+            btnCheckout.setEnabled(false);
+        } else {
+            btnCheckout.setEnabled(true);
+        }
     }
 
     private double calculateTotalPrice() {
