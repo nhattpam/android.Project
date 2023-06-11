@@ -35,6 +35,7 @@ public class CartActivity extends AppCompatActivity {
     private static List<Cart> cartList;
     private RecyclerView recyclerView;
     private CartAdapter cartAdapter;
+
     private TextView tvTotalPrice;
 
     private Button btnCheckout;
@@ -83,6 +84,15 @@ public class CartActivity extends AppCompatActivity {
                 intent.putExtra("username", username); // Pass the username
                 saveBillToDatabase();
                 startActivity(intent);
+            }
+        });
+
+        //remove item from cart
+        cartAdapter.setRemoveItemClickListener(new CartAdapter.OnRemoveItemClickListener() {
+            @Override
+            public void onRemoveItemClick(int position) {
+                // Handle the remove item action
+                removeFromCart(position);
             }
         });
 
@@ -136,6 +146,18 @@ public class CartActivity extends AppCompatActivity {
             totalPrice += price * cart.getQuantity();
         }
         return totalPrice;
+    }
+
+//method remove item cart
+    private void removeFromCart(int position) {
+        // Remove the item from the cart list
+        cartList.remove(position);
+
+        // Notify the adapter about the item removal
+        cartAdapter.notifyItemRemoved(position);
+
+        // Update the total price and UI
+        updateCartUI();
     }
 }
 

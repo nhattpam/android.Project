@@ -3,6 +3,7 @@ package com.example.projectprm;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,6 +32,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.bind(cart);
     }
 
+    //remove cart item
+    private OnRemoveItemClickListener removeItemClickListener;
+
+    public void setRemoveItemClickListener(OnRemoveItemClickListener listener) {
+        this.removeItemClickListener = listener;
+    }
+
+    public interface OnRemoveItemClickListener {
+        void onRemoveItemClick(int position);
+    }
+    //end remove cart item
+
     @Override
     public int getItemCount() {
         return cartList.size();
@@ -42,12 +55,27 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         private TextView tvProductPrice;
         private TextView tvProductQuantity;
 
+        private ImageButton btnRemove;
+
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
             ivProductImage = itemView.findViewById(R.id.iv_product_image);
             tvProductName = itemView.findViewById(R.id.tv_product_name);
             tvProductPrice = itemView.findViewById(R.id.tv_product_price);
             tvProductQuantity = itemView.findViewById(R.id.tv_product_quantity);
+            btnRemove = itemView.findViewById(R.id.btn_remove_from_cart);
+
+            btnRemove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (removeItemClickListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            removeItemClickListener.onRemoveItemClick(position);
+                        }
+                    }
+                }
+            });
         }
 
         public void bind(Cart cart) {
@@ -64,4 +92,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         }
 
     }
+
+
 }
