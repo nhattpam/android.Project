@@ -57,15 +57,28 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     private void addToCart(Product product, Context context) {
         List<Cart> cartList = CartActivity.getCartList();
 
-        // Create a new Cart object with quantity 1
-        Cart cart = new Cart(product, 1);
+        boolean isProductAlreadyInCart = false;
 
-        // Add the cart to the cartList
-        cartList.add(cart);
+        // Iterate through the cartList to check if the product is already in the cart
+        for (Cart cart : cartList) {
+            if (cart.getProduct().equals(product)) {
+                // Product is already in the cart, update the quantity
+                cart.setQuantity(cart.getQuantity() + 1);
+                isProductAlreadyInCart = true;
+                break;
+            }
+        }
+
+        if (!isProductAlreadyInCart) {
+            // Product is not in the cart, add a new Cart object
+            Cart cart = new Cart(product, 1);
+            cartList.add(cart);
+        }
 
         // Show a toast message indicating the product was added to cart
         Toast.makeText(context, "Product added to cart", Toast.LENGTH_SHORT).show();
     }
+
 
     @Override
     public int getItemCount() {
