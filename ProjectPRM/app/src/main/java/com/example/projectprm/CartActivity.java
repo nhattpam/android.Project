@@ -4,9 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +36,9 @@ public class CartActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private CartAdapter cartAdapter;
     private TextView tvTotalPrice;
+
+    private Button btnCheckout;
+
     public static List<Cart> getCartList() {
         if (cartList == null) {
             cartList = new ArrayList<>();
@@ -45,6 +52,7 @@ public class CartActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recycler_view_cart);
         tvTotalPrice = findViewById(R.id.tv_total_price);
+        btnCheckout = findViewById(R.id.btn_checkout);
 
         // Get the cartList from the CartActivity
         List<Cart> cartList = CartActivity.getCartList();
@@ -57,7 +65,21 @@ public class CartActivity extends AppCompatActivity {
             setupRecyclerView();
             updateCartUI();
         }
+
+        btnCheckout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Pass the cart information and total price to the BillActivity
+                Intent intent = new Intent(CartActivity.this, BillActivity.class);
+                intent.putExtra("cartList", (Serializable) cartList);
+                intent.putExtra("totalPrice", calculateTotalPrice());
+                startActivity(intent);
+            }
+        });
+
+
     }
+
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -12,6 +12,9 @@
         android:theme="@style/Theme.ProjectPRM"
         tools:targetApi="31">
         <activity
+            android:name=".BillActivity"
+            android:exported="false" />
+        <activity
             android:name=".CartActivity"
             android:exported="false" />
         <activity
