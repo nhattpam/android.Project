@@ -1,10 +1,14 @@
 package com.example.projectprm;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,6 +43,28 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
         holder.bind(product);
+
+        // Set click listener for "Add to Cart" icon
+        holder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle "Add to Cart" click event
+                addToCart(product, holder.itemView.getContext());
+            }
+        });
+    }
+
+    private void addToCart(Product product, Context context) {
+        List<Cart> cartList = CartActivity.getCartList();
+
+        // Create a new Cart object with quantity 1
+        Cart cart = new Cart(product, 1);
+
+        // Add the cart to the cartList
+        cartList.add(cart);
+
+        // Show a toast message indicating the product was added to cart
+        Toast.makeText(context, "Product added to cart", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -50,12 +76,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         private ImageView ivProductImage;
         private TextView tvProductName;
         private TextView tvProductPrice;
+        private ImageButton btnAddToCart;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             ivProductImage = itemView.findViewById(R.id.iv_product_image);
             tvProductName = itemView.findViewById(R.id.tv_product_name);
             tvProductPrice = itemView.findViewById(R.id.tv_product_price);
+            btnAddToCart = itemView.findViewById(R.id.btn_add_to_cart);
 
             // Set click listener for the item view
             itemView.setOnClickListener(new View.OnClickListener() {

@@ -1,9 +1,10 @@
 package com.example.projectprm;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cart {
+public class Cart  implements Serializable {
     private Product product;
     private int quantity;
 

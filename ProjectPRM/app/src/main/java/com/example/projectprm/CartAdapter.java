@@ -56,8 +56,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             // Set the product details in the views
             ivProductImage.setImageResource(product.getImageResourceId());
             tvProductName.setText(product.getName());
-            tvProductPrice.setText(String.format("Price: $%.2f", product.getPrice()));
+
+            double price = Double.parseDouble(product.getPrice());
+            tvProductPrice.setText(String.format("Price: $%.2f", price));
+
             tvProductQuantity.setText(String.format("Quantity: %d", cart.getQuantity()));
         }
+
     }
 }

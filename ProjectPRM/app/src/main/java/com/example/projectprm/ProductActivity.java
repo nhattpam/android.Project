@@ -58,9 +58,9 @@ public class ProductActivity extends AppCompatActivity {
         productList.clear();
 
         // Add sample products or fetch from the database
-        productList.add(new Product(1, "Product 1", "Description 1", "$10.99", R.drawable.gigabyte));
-        productList.add(new Product(2, "Product 2", "Description 2", "$19.99", R.drawable.hp));
-        productList.add(new Product(3, "Product 3", "Description 3", "$15.99", R.drawable.lenovo));
+        productList.add(new Product(1, "Product 1", "Description 1", "10.99", R.drawable.gigabyte));
+        productList.add(new Product(2, "Product 2", "Description 2", "19.99", R.drawable.hp));
+        productList.add(new Product(3, "Product 3", "Description 3", "15.99", R.drawable.lenovo));
 
 
         // Notify the adapter that the data set has changed

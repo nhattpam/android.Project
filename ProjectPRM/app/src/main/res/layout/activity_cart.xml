@@ -1,39 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- activity_cart.xml -->
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".CartActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_cart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/ll_total_price" />
+        android:layout_height="match_parent" />
 
-    <LinearLayout
-        android:id="@+id/ll_total_price"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_total_price"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@android:color/white"
-        android:orientation="horizontal"
-        android:padding="16dp">
-
-        <TextView
-            android:id="@+id/tv_total_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Total Price: "
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_total_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp" />
-
-    </LinearLayout>
+        android:layout_centerHorizontal="true"
+        android:padding="16dp"
+        android:textSize="18sp" />
 
 </RelativeLayout>
+
 

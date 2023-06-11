@@ -35,11 +35,5 @@
         android:textStyle="bold"
         android:layout_marginTop="8dp" />
 
-    <Button
-        android:id="@+id/btn_add_to_cart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add to Cart"
-        android:layout_marginTop="16dp" />
 
 </LinearLayout>
