@@ -68,10 +68,21 @@ public class CartActivity extends AppCompatActivity {
         if (cartList == null || cartList.isEmpty()) {
             // Show an empty cart message or perform any other action
             Toast.makeText(this, "Cart is empty", Toast.LENGTH_SHORT).show();
+            updateCartUI();
         } else {
             setupRecyclerView();
             updateCartUI();
+            //remove item from cart
+            cartAdapter.setRemoveItemClickListener(new CartAdapter.OnRemoveItemClickListener() {
+                @Override
+                public void onRemoveItemClick(int position) {
+                    // Handle the remove item action
+                    removeFromCart(position);
+                }
+            });
         }
+
+
 
         btnCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,14 +98,7 @@ public class CartActivity extends AppCompatActivity {
             }
         });
 
-        //remove item from cart
-        cartAdapter.setRemoveItemClickListener(new CartAdapter.OnRemoveItemClickListener() {
-            @Override
-            public void onRemoveItemClick(int position) {
-                // Handle the remove item action
-                removeFromCart(position);
-            }
-        });
+
 
 
     }
@@ -120,10 +124,6 @@ public class CartActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         cartAdapter = new CartAdapter(CartActivity.getCartList());
@@ -135,7 +135,7 @@ public class CartActivity extends AppCompatActivity {
         tvTotalPrice.setText(String.format("Total Price: $%.2f", totalPrice));
 
         // Disable the checkout button if the cart is empty
-        if (cartList.isEmpty()) {
+        if (cartList.isEmpty() || cartList == null) {
             btnCheckout.setEnabled(false);
         } else {
             btnCheckout.setEnabled(true);
