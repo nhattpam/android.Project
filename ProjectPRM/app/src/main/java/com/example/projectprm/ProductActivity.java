@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,11 +22,23 @@ public class ProductActivity extends AppCompatActivity {
     private List<Product> productList;
     // Initialize your SQLite database helper
     private DatabaseHelper databaseHelper;
+    private static final String TABLE_PRODUCTS = "products";
+
+    private static final String COLUMN_PRODUCT_ID = "product_id";
+    private static final String COLUMN_PRODUCT_NAME = "product_name";
+    private static final String COLUMN_PRODUCT_DESCRIPTION = "product_description";
+    private static final String COLUMN_PRODUCT_PRICE = "product_price";
+
+    private String loggedInUsername; // Variable to store the username of the logged-in user
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
+
+        // Get the logged-in username from the intent
+        loggedInUsername = getIntent().getStringExtra("username");
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -62,9 +76,34 @@ public class ProductActivity extends AppCompatActivity {
         productList.add(new Product(2, "Product 2", "Description 2", "19.99", R.drawable.hp));
         productList.add(new Product(3, "Product 3", "Description 3", "15.99", R.drawable.lenovo));
 
+        // Save the products to the database
+        for (Product product : productList) {
+            saveProductToDatabase(product);
+        }
 
         // Notify the adapter that the data set has changed
         productAdapter.notifyDataSetChanged();
+    }
+
+    private void saveProductToDatabase(Product product) {
+        // Get a writable instance of the database
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+        // Create a ContentValues object to hold the product values
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PRODUCT_NAME, product.getName());
+        values.put(COLUMN_PRODUCT_DESCRIPTION, product.getDescription());
+        values.put(COLUMN_PRODUCT_PRICE, product.getPrice());
+        // Add more columns as needed
+
+        // Insert the values into the products table
+        long productId = db.insert(TABLE_PRODUCTS, null, values);
+
+        // Set the generated product ID in the product object
+        product.setId((int) productId);
+
+        // Close the database connection
+        db.close();
     }
 
     //hien thi icon cart
@@ -88,6 +127,7 @@ public class ProductActivity extends AppCompatActivity {
 
     private void openCartActivity() {
         Intent intent = new Intent(this, CartActivity.class);
+        intent.putExtra("username", loggedInUsername); // Pass the username to the CartActivity
         startActivity(intent);
     }
 }

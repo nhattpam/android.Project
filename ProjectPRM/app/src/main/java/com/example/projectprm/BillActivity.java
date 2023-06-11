@@ -13,6 +13,7 @@ public class BillActivity extends AppCompatActivity {
 
     private TextView tvCartInfo;
     private TextView tvTotalPrice;
+    private TextView tvUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,9 +22,14 @@ public class BillActivity extends AppCompatActivity {
 
         tvCartInfo = findViewById(R.id.tv_cart_info);
         tvTotalPrice = findViewById(R.id.tv_total_price);
+        tvUsername = findViewById(R.id.tv_username);
 
         // Retrieve the cart information and total price from the intent extras
         Intent intent = getIntent();
+        String username = intent.getStringExtra("username");
+
+        // Set the username in the TextView
+        tvUsername.setText("Customer with username: " + username);
         if (intent != null) {
             List<Cart> cartList = (List<Cart>) intent.getSerializableExtra("cartList");
             double totalPrice = intent.getDoubleExtra("totalPrice", 0.0);
