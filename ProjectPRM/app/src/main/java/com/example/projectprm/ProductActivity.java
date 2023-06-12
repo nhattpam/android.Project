@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +67,33 @@ public class ProductActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+    }
+
+    private void openProductActivity() {
+        // Already in the ProductActivity, do nothing
+    }
+
+    private void openMapActivity() {
+        Intent intent = new Intent(this, MapActivity.class);
+        intent.putExtra("username", loggedInUsername);
+        startActivity(intent);
+        finish();
+    }
+
+    private void openChatActivity() {
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("username", loggedInUsername);
+        startActivity(intent);
+        finish();
+    }
+
+    private void openProfileActivity() {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra("username", loggedInUsername);
+        startActivity(intent);
+        finish();
     }
 
     private void populateProductList() {

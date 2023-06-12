@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (isValid) {
                         Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                         // Proceed to the next screen or perform desired action
-                        Intent intent = new Intent(LoginActivity.this, ProductActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, ShopActivity.class);
                         intent.putExtra("username", username);
                         startActivity(intent);
                     } else {
