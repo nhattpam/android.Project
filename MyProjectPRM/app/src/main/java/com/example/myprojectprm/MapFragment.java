@@ -59,14 +59,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Set up the map and add markers, etc.
 
         // Get the address (latitude and longitude) from your data source
-        double latitude = 37.7749; // Example latitude
-        double longitude = -122.4194; // Example longitude
+        double latitude = 10.6235447; // Example latitude
+        double longitude = 107.0543271; // Example longitude
         LatLng location = new LatLng(latitude, longitude);
 
         // Add a marker at the location with a title and snippet
         googleMap.addMarker(new MarkerOptions()
                 .position(location)
-                .title("Marker Title")
+                .title("Fpt Shop")
                 .snippet("Marker Snippet"));
 
         // Move the camera to the marker location
