@@ -1,10 +1,12 @@
 package com.example.myprojectprm;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +45,9 @@ public class CartFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
 
+        // Retrieve the passed username from the arguments
+        username = getArguments().getString("username");
+
         recyclerView = view.findViewById(R.id.recycler_view_cart);
         tvTotalPrice = view.findViewById(R.id.tv_total_price);
         btnCheckout = view.findViewById(R.id.btn_checkout);
@@ -66,6 +72,30 @@ public class CartFragment extends Fragment {
                 }
             });
         }
+
+        //checkout
+        btnCheckout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Create a new instance of the BillFragment
+                BillFragment billFragment = new BillFragment();
+                // Pass the cart information and total price to the BillActivity
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("cartList", (Serializable) cartList);
+                bundle.putDouble("totalPrice", calculateTotalPrice());
+                bundle.putString("username", username);// Pass the username
+                billFragment.setArguments(bundle);
+                // Save the bill to the database
+                saveBillToDatabase();
+                // Replace the current fragment with the ProductDetailFragment
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.frame_container, billFragment)
+                        .addToBackStack(null) // Add the fragment to the back stack to enable back navigation
+                        .commit();
+            }
+        });
 
         return view;
     }
