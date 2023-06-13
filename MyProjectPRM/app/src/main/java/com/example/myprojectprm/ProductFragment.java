@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -56,16 +57,28 @@ public class ProductFragment extends Fragment {
 
         populateProductList();
 
-//        productAdapter.setOnItemClickListener(new ProductAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(int position) {
-//                Product clickedProduct = productList.get(position);
-//                // Launch the ProductDetailActivity and pass the clicked product details
-//                Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
-//                intent.putExtra("product", clickedProduct);
-//                startActivity(intent);
-//            }
-//        });
+        productAdapter.setOnItemClickListener(new ProductAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Product clickedProduct = productList.get(position);
+
+                // Create a new instance of the ProductDetailFragment
+                ProductDetailFragment productDetailFragment = new ProductDetailFragment();
+
+                // Pass the clicked product details to the fragment
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("product", clickedProduct);
+                productDetailFragment.setArguments(bundle);
+
+                // Replace the current fragment with the ProductDetailFragment
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.frame_container, productDetailFragment)
+                        .addToBackStack(null) // Add the fragment to the back stack to enable back navigation
+                        .commit();
+            }
+        });
+
     }
 
     private void populateProductList() {
