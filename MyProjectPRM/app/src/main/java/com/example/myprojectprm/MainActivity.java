@@ -3,6 +3,7 @@ package com.example.myprojectprm;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,10 +24,15 @@ public class MainActivity extends AppCompatActivity {
     private ChatFragment chatFragment;
     private ProfileFragment profileFragment;
 
+    private String loggedInUsername; // Variable to store the username of the logged-in user
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Get the logged-in username from the intent
+        loggedInUsername = getIntent().getStringExtra("username");
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         frameContainer = findViewById(R.id.frame_container);
@@ -77,4 +83,32 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_cart, menu);
         return true;
     }
+
+    //OPEN cart Screen
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_cart) {
+            // Open the cart activity or perform any action you desire
+            openCartFragment();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    private void openCartFragment() {
+        // Create a new instance of the CartFragment
+        CartFragment cartFragment = new CartFragment();
+
+        // Pass the username to the cart
+        Bundle bundle = new Bundle();
+        bundle.putString("username", loggedInUsername);
+        cartFragment.setArguments(bundle);
+
+        // Replace the current fragment with the CartFragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_container, cartFragment)
+                .addToBackStack(null) // Add the fragment to the back stack to enable back navigation
+                .commit();
+    }
+
 }

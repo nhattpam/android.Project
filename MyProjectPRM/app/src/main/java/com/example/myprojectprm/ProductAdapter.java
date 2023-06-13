@@ -44,39 +44,39 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.bind(product);
 
         // Set click listener for "Add to Cart" icon
-//        holder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Handle "Add to Cart" click event
-//                addToCart(product, holder.itemView.getContext());
-//            }
-//        });
+        holder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle "Add to Cart" click event
+                addToCart(product, holder.itemView.getContext());
+            }
+        });
     }
 
-//    private void addToCart(Product product, Context context) {
-//        List<Cart> cartList = CartActivity.getCartList();
-//
-//        boolean isProductAlreadyInCart = false;
-//
-//        // Iterate through the cartList to check if the product is already in the cart
-//        for (Cart cart : cartList) {
-//            if (cart.getProduct().equals(product)) {
-//                // Product is already in the cart, update the quantity
-//                cart.setQuantity(cart.getQuantity() + 1);
-//                isProductAlreadyInCart = true;
-//                break;
-//            }
-//        }
-//
-//        if (!isProductAlreadyInCart) {
-//            // Product is not in the cart, add a new Cart object
-//            Cart cart = new Cart(product, 1);
-//            cartList.add(cart);
-//        }
-//
-//        // Show a toast message indicating the product was added to cart
-//        Toast.makeText(context, "Product added to cart", Toast.LENGTH_SHORT).show();
-//    }
+    private void addToCart(Product product, Context context) {
+        List<Cart> cartList = CartFragment.getCartList();
+
+        boolean isProductAlreadyInCart = false;
+
+        // Iterate through the cartList to check if the product is already in the cart
+        for (Cart cart : cartList) {
+            if (cart.getProduct().equals(product)) {
+                // Product is already in the cart, update the quantity
+                cart.setQuantity(cart.getQuantity() + 1);
+                isProductAlreadyInCart = true;
+                break;
+            }
+        }
+
+        if (!isProductAlreadyInCart) {
+            // Product is not in the cart, add a new Cart object
+            Cart cart = new Cart(product, 1);
+            cartList.add(cart);
+        }
+
+        // Show a toast message indicating the product was added to cart
+        Toast.makeText(context, "Product added to cart", Toast.LENGTH_SHORT).show();
+    }
 
 
     @Override

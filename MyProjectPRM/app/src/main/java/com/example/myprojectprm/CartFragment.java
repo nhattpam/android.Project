@@ -2,63 +2,136 @@ package com.example.myprojectprm;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CartFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class CartFragment extends Fragment {
+    private static List<Cart> cartList;
+    private RecyclerView recyclerView;
+    private CartAdapter cartAdapter;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private TextView tvTotalPrice;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Button btnCheckout;
 
-    public CartFragment() {
-        // Required empty public constructor
-    }
+    private String username;
+    private int userId;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CartFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CartFragment newInstance(String param1, String param2) {
-        CartFragment fragment = new CartFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static List<Cart> getCartList() {
+        if (cartList == null) {
+            cartList = new ArrayList<>();
+        }
+        return cartList;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_cart, container, false);
+
+        recyclerView = view.findViewById(R.id.recycler_view_cart);
+        tvTotalPrice = view.findViewById(R.id.tv_total_price);
+        btnCheckout = view.findViewById(R.id.btn_checkout);
+
+        // Get the cartList from the CartActivity
+        List<Cart> cartList = CartFragment.getCartList();
+
+        // Check if the cartList is null or empty
+        if (cartList == null || cartList.isEmpty()) {
+            // Show an empty cart message or perform any other action
+            Toast.makeText(getContext(), "Cart is empty", Toast.LENGTH_SHORT).show();
+            updateCartUI();
+        } else {
+            setupRecyclerView();
+            updateCartUI();
+            //remove item from cart
+            cartAdapter.setRemoveItemClickListener(new CartAdapter.OnRemoveItemClickListener() {
+                @Override
+                public void onRemoveItemClick(int position) {
+                    // Handle the remove item action
+                    removeFromCart(position);
+                }
+            });
+        }
+
+        return view;
+    }
+
+    private int getUserId() {
+        // Initialize your database helper
+        DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
+
+        // Retrieve the userId based on the username
+        userId = databaseHelper.getUserIdByUsername(username);
+        return userId;
+    }
+    private void saveBillToDatabase() {
+        // Initialize your database helper
+        DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
+
+        // Save the bill information to the database
+        for (Cart cart : cartList) {
+            int productId = cart.getProduct().getId();
+            int quantity = cart.getQuantity();
+
+            // Save the bill details using the productId, quantity, and username
+            databaseHelper.addBill(productId, quantity, getUserId(), calculateTotalPrice());
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cart, container, false);
+    private void setupRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        cartAdapter = new CartAdapter(CartFragment.getCartList());
+        recyclerView.setAdapter(cartAdapter);
+    }
+
+    private void updateCartUI() {
+        double totalPrice = calculateTotalPrice();
+        tvTotalPrice.setText(String.format("Total Price: $%.2f", totalPrice));
+
+        // Disable the checkout button if the cart is empty
+        if (cartList.isEmpty() || cartList == null) {
+            btnCheckout.setEnabled(false);
+        } else {
+            btnCheckout.setEnabled(true);
+        }
+    }
+
+    private double calculateTotalPrice() {
+        double totalPrice = 0;
+        List<Cart> cartList = CartFragment.getCartList();
+        for (Cart cart : cartList) {
+            String priceString = cart.getProduct().getPrice();
+            // Remove the "$" symbol from the price string
+            String priceWithoutSymbol = priceString.replace("$", "");
+            double price = Double.parseDouble(priceWithoutSymbol);
+            totalPrice += price * cart.getQuantity();
+        }
+        return totalPrice;
+    }
+
+    //method remove item cart
+    private void removeFromCart(int position) {
+        // Remove the item from the cart list
+        cartList.remove(position);
+
+        // Notify the adapter about the item removal
+        cartAdapter.notifyItemRemoved(position);
+
+        // Update the total price and UI
+        updateCartUI();
     }
 }
