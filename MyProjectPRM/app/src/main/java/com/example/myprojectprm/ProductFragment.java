@@ -1,64 +1,99 @@
 package com.example.myprojectprm;
 
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProductFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class ProductFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView recyclerView;
+    private ProductAdapter productAdapter;
+    private List<Product> productList;
+    private DatabaseHelper databaseHelper;
+    private static final String TABLE_PRODUCTS = "products";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String COLUMN_PRODUCT_ID = "product_id";
+    private static final String COLUMN_PRODUCT_NAME = "product_name";
+    private static final String COLUMN_PRODUCT_DESCRIPTION = "product_description";
+    private static final String COLUMN_PRODUCT_PRICE = "product_price";
 
-    public ProductFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProductFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProductFragment newInstance(String param1, String param2) {
-        ProductFragment fragment = new ProductFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private String loggedInUsername; // Variable to store the username of the logged-in user
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_product, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        productList = new ArrayList<>();
+        productAdapter = new ProductAdapter(productList);
+        recyclerView.setAdapter(productAdapter);
+
+        databaseHelper = new DatabaseHelper(requireContext());
+
+        populateProductList();
+
+//        productAdapter.setOnItemClickListener(new ProductAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(int position) {
+//                Product clickedProduct = productList.get(position);
+//                // Launch the ProductDetailActivity and pass the clicked product details
+//                Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
+//                intent.putExtra("product", clickedProduct);
+//                startActivity(intent);
+//            }
+//        });
+    }
+
+    private void populateProductList() {
+        productList.clear();
+
+        productList.add(new Product(1, "Product 1", "Description 1", "10.99", R.drawable.gigabyte));
+        productList.add(new Product(2, "Product 2", "Description 2", "19.99", R.drawable.hp));
+        productList.add(new Product(3, "Product 3", "Description 3", "15.99", R.drawable.lenovo));
+
+        for (Product product : productList) {
+            saveProductToDatabase(product);
+        }
+
+        productAdapter.notifyDataSetChanged();
+    }
+
+    private void saveProductToDatabase(Product product) {
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PRODUCT_NAME, product.getName());
+        values.put(COLUMN_PRODUCT_DESCRIPTION, product.getDescription());
+        values.put(COLUMN_PRODUCT_PRICE, product.getPrice());
+
+        long productId = db.insert(TABLE_PRODUCTS, null, values);
+
+        product.setId((int) productId);
+
+        db.close();
     }
 }
