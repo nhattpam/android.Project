@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Get the logged-in username from the intent
         loggedInUsername = getIntent().getStringExtra("username");
+        Log.d("main", loggedInUsername);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         frameContainer = findViewById(R.id.frame_container);
@@ -70,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setFragment(Fragment fragment) {
+        Bundle bundle = new Bundle();
+        bundle.putString("username", loggedInUsername);
+        fragment.setArguments(bundle);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.frame_container, fragment)

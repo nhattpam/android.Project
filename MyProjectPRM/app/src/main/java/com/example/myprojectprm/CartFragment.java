@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ public class CartFragment extends Fragment {
 
         // Retrieve the passed username from the arguments
         username = getArguments().getString("username");
+        Log.d("cart", username);
 
         recyclerView = view.findViewById(R.id.recycler_view_cart);
         tvTotalPrice = view.findViewById(R.id.tv_total_price);

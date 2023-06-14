@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "myapp.db";
     private static final int DATABASE_VERSION = 2;
@@ -136,6 +139,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userId;
     }
 
+    public List<Bill> getBillsByUserId(int userId) {
+        List<Bill> billList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT * FROM " + TABLE_BILLS +
+                " WHERE " + COLUMN_BILL_USER_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                int billId = cursor.getInt(cursor.getColumnIndex(COLUMN_BILL_ID));
+                int productId = cursor.getInt(cursor.getColumnIndex(COLUMN_BILL_PRODUCT_ID));
+                int quantity = cursor.getInt(cursor.getColumnIndex(COLUMN_BILL_QUANTITY));
+                double totalPrice = cursor.getDouble(cursor.getColumnIndex(COLUMN_BILL_TOTAL_PRICE));
+
+                // Create a Bill object with the retrieved data
+                Bill bill = new Bill(billId, productId, quantity, userId, totalPrice);
+                billList.add(bill);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return billList;
+    }
 
 }
 
