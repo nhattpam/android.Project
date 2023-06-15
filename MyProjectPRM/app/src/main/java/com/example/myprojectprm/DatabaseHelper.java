@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -32,6 +33,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_BILL_QUANTITY = "quantity";
     private static final String COLUMN_BILL_USER_ID = "user_id";
     private static final String COLUMN_BILL_TOTAL_PRICE = "total_price";
+    private static final String COLUMN_BILL_ORDER_DATE = "order_date";
+
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -66,9 +69,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_BILL_QUANTITY + " INTEGER," +
                 COLUMN_BILL_USER_ID + " INTEGER," +
                 COLUMN_BILL_TOTAL_PRICE + " REAL," +
+                COLUMN_BILL_ORDER_DATE + " TEXT," +
                 "FOREIGN KEY(" + COLUMN_BILL_PRODUCT_ID + ") REFERENCES " + TABLE_PRODUCTS + "(" + COLUMN_PRODUCT_ID + ")," +
                 "FOREIGN KEY(" + COLUMN_BILL_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + ")" +
                 ")";
+
         db.execSQL(CREATE_BILLS_TABLE);
     }
 
@@ -108,17 +113,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return cursorCount > 0;
     }
-    public long addBill(int productId, int quantity, int userId, double totalPrice) {
+    public long addBill(int productId, int quantity, int userId, double totalPrice, Date orderDate) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_BILL_PRODUCT_ID, productId);
         values.put(COLUMN_BILL_QUANTITY, quantity);
         values.put(COLUMN_BILL_USER_ID, userId);
         values.put(COLUMN_BILL_TOTAL_PRICE, totalPrice);
+        values.put(COLUMN_BILL_ORDER_DATE, orderDate.getTime());
         long billId = db.insert(TABLE_BILLS, null, values);
         db.close();
         return billId;
     }
+
 
     public int getUserIdByUsername(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -153,9 +160,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 int productId = cursor.getInt(cursor.getColumnIndex(COLUMN_BILL_PRODUCT_ID));
                 int quantity = cursor.getInt(cursor.getColumnIndex(COLUMN_BILL_QUANTITY));
                 double totalPrice = cursor.getDouble(cursor.getColumnIndex(COLUMN_BILL_TOTAL_PRICE));
+                long orderDateTimestamp = cursor.getLong(cursor.getColumnIndex(COLUMN_BILL_ORDER_DATE));
+                Date orderDate = new Date(orderDateTimestamp);
 
                 // Create a Bill object with the retrieved data
-                Bill bill = new Bill(billId, productId, quantity, userId, totalPrice);
+                Bill bill = new Bill(billId, productId, quantity, userId, totalPrice, orderDate);
                 billList.add(bill);
             } while (cursor.moveToNext());
         }
@@ -165,6 +174,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return billList;
     }
+
+
 
 }
 

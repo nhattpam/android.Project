@@ -30,5 +30,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Total Price: " />
+    <TextView
+        android:id="@+id/order_date_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Order Date: " />
 
 </LinearLayout>

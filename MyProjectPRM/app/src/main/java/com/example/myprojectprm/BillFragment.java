@@ -49,10 +49,13 @@ public class BillFragment extends Fragment {
             builder.append(cart.getProduct().getName())
                     .append(" - Quantity: ")
                     .append(cart.getQuantity())
+                    .append(" - Order Date: ")
+                    .append(cart.getOrderDate())
                     .append(System.lineSeparator());
         }
         tvCartInfo.setText(builder.toString());
     }
+
 
     private void displayTotalPrice(double totalPrice) {
         String priceText = String.format(Locale.getDefault(), "Total Price: $%.2f", totalPrice);

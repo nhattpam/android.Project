@@ -6,7 +6,11 @@
     android:orientation="vertical">
 
     <!-- Other views in the profile fragment -->
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="My Order History"
+        android:textSize="50dp"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewBills"
         android:layout_width="match_parent"

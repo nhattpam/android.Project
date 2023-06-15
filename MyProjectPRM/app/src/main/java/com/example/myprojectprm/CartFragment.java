@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -114,13 +115,16 @@ public class CartFragment extends Fragment {
         // Initialize your database helper
         DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
 
+        // Get the current date and time as the order date
+        Date orderDate = new Date();
+
         // Save the bill information to the database
         for (Cart cart : cartList) {
             int productId = cart.getProduct().getId();
             int quantity = cart.getQuantity();
 
             // Save the bill details using the productId, quantity, and username
-            databaseHelper.addBill(productId, quantity, getUserId(), calculateTotalPrice());
+            databaseHelper.addBill(productId, quantity, getUserId(), calculateTotalPrice(), orderDate);
         }
     }
 

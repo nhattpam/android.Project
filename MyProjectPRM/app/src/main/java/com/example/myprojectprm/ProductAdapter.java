@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Date;
 import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
@@ -70,7 +71,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         if (!isProductAlreadyInCart) {
             // Product is not in the cart, add a new Cart object
-            Cart cart = new Cart(product, 1);
+            Date orderDate = new Date();
+            Cart cart = new Cart(product, 1, orderDate);
             cartList.add(cart);
         }
 
