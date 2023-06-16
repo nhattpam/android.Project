@@ -90,6 +90,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_cart, menu);
+
+        // Add the logout icon to the menu
+        MenuItem logoutItem = menu.add(Menu.NONE, R.id.action_logout, Menu.NONE, "Logout");
+        logoutItem.setIcon(R.drawable.ic_logout);
         return true;
     }
 
@@ -98,8 +102,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.action_cart) {
-            // Open the cart activity or perform any action you desire
+            // Open the cart activity
             openCartFragment();
+            return true;
+        } else if(itemId == R.id.action_logout){
+            logoutUser();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -119,5 +126,23 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack(null) // Add the fragment to the back stack to enable back navigation
                 .commit();
     }
+
+    private void logoutUser() {
+        // Clear the saved username and password from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences(AppConstants.SHARED_PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("username");
+        editor.remove("password");
+        editor.remove("isLoggedIn"); // Remove the isLoggedIn flag
+        editor.apply();
+
+        // Navigate back to the login screen
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish(); // Finish the MainActivity to prevent returning to it when pressing back
+    }
+
+
 
 }
