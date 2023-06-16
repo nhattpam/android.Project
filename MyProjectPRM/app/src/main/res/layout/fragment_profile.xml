@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="My Order History"
-        android:textSize="50dp"/>
+        android:textSize="27dp"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewBills"
         android:layout_width="match_parent"
