@@ -1,5 +1,7 @@
 package com.example.myprojectprm;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +21,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -51,7 +55,7 @@ public class CartFragment extends Fragment {
 
         // Retrieve the passed username from the arguments
 //        username = getArguments().getString("username");
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(AppConstants.SHARED_PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(AppConstants.SHARED_PREFS_NAME, MODE_PRIVATE);
         loggedInUsername = sharedPreferences.getString("username", "");
         Log.d("cart", loggedInUsername);
 
@@ -68,6 +72,17 @@ public class CartFragment extends Fragment {
             Toast.makeText(getContext(), "Cart is empty", Toast.LENGTH_SHORT).show();
             updateCartUI();
         } else {
+            //save cart Shared
+            sharedPreferences = getActivity().getSharedPreferences(AppConstants.CART_PREFS_NAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            Gson gson = new Gson();
+            String cartListJson = gson.toJson(cartList);
+
+            editor.putString("cartList", cartListJson);
+            editor.apply();
+            //end save cart Shared
+
             setupRecyclerView();
             updateCartUI();
             //remove item from cart
