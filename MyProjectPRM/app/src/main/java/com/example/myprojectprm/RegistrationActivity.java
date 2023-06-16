@@ -34,12 +34,15 @@ public class RegistrationActivity extends AppCompatActivity {
 
                 if (username.isEmpty() || password.isEmpty()) {
                     Toast.makeText(RegistrationActivity.this, "Please enter all fields", Toast.LENGTH_SHORT).show();
+                } else if (databaseHelper.isUsernameExists(username)) {
+                    Toast.makeText(RegistrationActivity.this, "Username already exists", Toast.LENGTH_SHORT).show();
                 } else {
-                    databaseHelper.addUser(username, password);
+                    databaseHelper.addUser(username, password, RegistrationActivity.this);
                     Toast.makeText(RegistrationActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
         });
+
     }
 }
