@@ -53,7 +53,7 @@ public class ProductFragment extends Fragment {
 
 // Retrieve the passed username from the arguments
         loggedInUsername = getArguments().getString("username");
-        Log.d("product", loggedInUsername);
+//        Log.d("product", loggedInUsername);
 
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));

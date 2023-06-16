@@ -1,5 +1,7 @@
 package com.example.myprojectprm;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -27,7 +29,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         // Retrieve the passed username from the arguments
-        loggedInUsername = getArguments().getString("username");
+//        loggedInUsername = getArguments().getString("username");
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(AppConstants.SHARED_PREFS_NAME, Context.MODE_PRIVATE);
+        loggedInUsername = sharedPreferences.getString("username", "");
         Log.d("map", loggedInUsername);
 
         mapView = view.findViewById(R.id.map_view);

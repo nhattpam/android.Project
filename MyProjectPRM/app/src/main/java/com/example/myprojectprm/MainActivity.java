@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -32,8 +33,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SharedPreferences sharedPreferences = getSharedPreferences(AppConstants.SHARED_PREFS_NAME, MODE_PRIVATE);
+        loggedInUsername = sharedPreferences.getString("username", "");
+
         // Get the logged-in username from the intent
-        loggedInUsername = getIntent().getStringExtra("username");
+//        loggedInUsername = getIntent().getStringExtra("username");
         Log.d("main", loggedInUsername);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);

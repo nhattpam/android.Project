@@ -1,6 +1,8 @@
 package com.example.myprojectprm;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -33,7 +35,7 @@ public class CartFragment extends Fragment {
 
     private Button btnCheckout;
 
-    private String username;
+    private String loggedInUsername;
     private int userId;
 
     public static List<Cart> getCartList() {
@@ -48,8 +50,10 @@ public class CartFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
 
         // Retrieve the passed username from the arguments
-        username = getArguments().getString("username");
-        Log.d("cart", username);
+//        username = getArguments().getString("username");
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(AppConstants.SHARED_PREFS_NAME, Context.MODE_PRIVATE);
+        loggedInUsername = sharedPreferences.getString("username", "");
+        Log.d("cart", loggedInUsername);
 
         recyclerView = view.findViewById(R.id.recycler_view_cart);
         tvTotalPrice = view.findViewById(R.id.tv_total_price);
@@ -87,7 +91,7 @@ public class CartFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("cartList", (Serializable) cartList);
                 bundle.putDouble("totalPrice", calculateTotalPrice());
-                bundle.putString("username", username);// Pass the username
+                bundle.putString("username", loggedInUsername);// Pass the username
                 billFragment.setArguments(bundle);
                 // Save the bill to the database
                 saveBillToDatabase();
@@ -108,7 +112,7 @@ public class CartFragment extends Fragment {
         DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
 
         // Retrieve the userId based on the username
-        userId = databaseHelper.getUserIdByUsername(username);
+        userId = databaseHelper.getUserIdByUsername(loggedInUsername);
         return userId;
     }
     private void saveBillToDatabase() {
