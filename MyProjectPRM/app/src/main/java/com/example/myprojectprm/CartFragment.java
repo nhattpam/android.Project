@@ -23,8 +23,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,6 +54,8 @@ public class CartFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
+
+        retrieveSavedCartData();
 
         // Retrieve the passed username from the arguments
 //        username = getArguments().getString("username");
@@ -188,5 +192,28 @@ public class CartFragment extends Fragment {
 
         // Update the total price and UI
         updateCartUI();
+
+        // Save the updated cart data to SharedPreferences
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(AppConstants.CART_PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Gson gson = new Gson();
+        String cartListJson = gson.toJson(cartList);
+
+        editor.putString("cartList", cartListJson);
+        editor.apply();
+    }
+
+    private void retrieveSavedCartData() {
+        // Retrieve the saved cart data from SharedPreferences
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(AppConstants.CART_PREFS_NAME, MODE_PRIVATE);
+        String cartListJson = sharedPreferences.getString("cartList", "");
+
+        if (!cartListJson.isEmpty()) {
+            // Convert the JSON string back to the list of Cart objects using Gson
+            Gson gson = new Gson();
+            Type cartListType = new TypeToken<List<Cart>>() {}.getType();
+            cartList = gson.fromJson(cartListJson, cartListType);
+        }
     }
 }

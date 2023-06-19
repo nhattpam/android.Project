@@ -1,6 +1,7 @@
 package com.example.myprojectprm;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
 
 import java.util.Date;
 import java.util.List;
@@ -75,6 +78,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             Cart cart = new Cart(product, 1, orderDate);
             cartList.add(cart);
         }
+// Save the updated cart data to SharedPreferences
+        SharedPreferences sharedPreferences = context.getSharedPreferences(AppConstants.CART_PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Gson gson = new Gson();
+        String cartListJson = gson.toJson(cartList);
+
+        editor.putString("cartList", cartListJson);
+        editor.apply();
 
         // Show a toast message indicating the product was added to cart
         Toast.makeText(context, "Product added to cart", Toast.LENGTH_SHORT).show();
