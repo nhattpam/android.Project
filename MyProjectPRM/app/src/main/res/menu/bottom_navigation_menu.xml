@@ -1,19 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu_product"
         android:title="Products"
-        android:icon="@drawable/ic_product" />
+        android:icon="@drawable/ic_product"
+        app:showAsAction="always"
+        android:iconTint="@color/amazon_yellow"
+        android:titleTextColor="@color/amazon_yellow"
+        android:checked="true" />
+
     <item
         android:id="@+id/menu_map"
         android:title="Map"
-        android:icon="@drawable/ic_map" />
-    <item
-        android:id="@+id/menu_chat"
-        android:title="Chat"
-        android:icon="@drawable/ic_chat" />
+        android:icon="@drawable/ic_map"
+        app:showAsAction="always"
+        android:iconTint="@color/amazon_yellow"
+        android:titleTextColor="@color/amazon_yellow" />
+
+<!--    <item-->
+<!--        android:id="@+id/menu_chat"-->
+<!--        android:title="Chat"-->
+<!--        android:icon="@drawable/ic_chat"-->
+<!--        android:showAsAction="always" &lt;!&ndash; Add this line &ndash;&gt;-->
+<!--    android:iconTint="@color/white" &lt;!&ndash; Add this line &ndash;&gt;-->
+<!--    android:titleTextColor="@color/white" /> &lt;!&ndash; Add this line &ndash;&gt;-->
+
     <item
         android:id="@+id/menu_profile"
         android:title="Profile"
-        android:icon="@drawable/ic_profile" />
+        android:icon="@drawable/ic_profile"
+        app:showAsAction="always"
+        android:iconTint="@color/amazon_yellow"
+        android:titleTextColor="@color/amazon_yellow" />
 </menu>

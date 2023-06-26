@@ -9,5 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="_bg__iphone_8_plus___1_ek2_color">#FFFFFF</color>
     <color name="cancel_color">#AE3F3F</color>
-    <color name="main_color">#F0595B</color>
+    <color name="main_color">#8adcde</color>
+    <color name="amazon_yellow">#FF9900</color>
+    <color name="amazon_yellow_dark">#FF9900</color>
 </resources>

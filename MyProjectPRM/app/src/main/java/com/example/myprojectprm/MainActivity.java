@@ -63,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.menu_map:
                         setFragment(mapFragment);
                         return true;
-                    case R.id.menu_chat:
-                        setFragment(chatFragment);
-                        return true;
+//                    case R.id.menu_chat:
+//                        setFragment(chatFragment);
+//                        return true;
                     case R.id.menu_profile:
                         setFragment(profileFragment);
                         return true;
