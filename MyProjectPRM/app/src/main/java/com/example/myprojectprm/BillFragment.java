@@ -1,5 +1,8 @@
 package com.example.myprojectprm;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -60,5 +63,21 @@ public class BillFragment extends Fragment {
     private void displayTotalPrice(double totalPrice) {
         String priceText = String.format(Locale.getDefault(), "Total Price: $%.2f", totalPrice);
         tvTotalPrice.setText(priceText);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        // Clear the cart data from SharedPreferences
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(AppConstants.CART_PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        // Clear the cart list in CartFragment
+        CartFragment.getCartList().clear();
+        // Disable the checkout button if the cart is empty
+
     }
 }
