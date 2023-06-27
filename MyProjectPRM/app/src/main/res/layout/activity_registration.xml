@@ -1,31 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/login_logo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logo_amazon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp" />
 
     <EditText
         android:id="@+id/et_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:hint="Username" />
+        android:layout_below="@id/login_logo"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="40dp"
+        android:padding="12dp"
+        android:hint="Username"
+        android:background="@drawable/edittext_rounded_bg"
+        android:textColorHint="#999999" />
 
     <EditText
         android:id="@+id/et_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/et_username"
-        android:layout_margin="16dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="40dp"
+        android:padding="12dp"
         android:hint="Password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:background="@drawable/edittext_rounded_bg"
+        android:textColorHint="#999999" />
 
     <Button
         android:id="@+id/btn_register"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/et_password"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
-        android:text="Register" />
+        android:text="Register"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/button_rounded_bg" />
 
 </RelativeLayout>
