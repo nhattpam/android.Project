@@ -43,10 +43,10 @@
 
     <ImageButton
         android:id="@+id/btn_remove_from_cart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_remove_from_cart"
-        android:background="?android:attr/selectableItemBackground" />
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_clear_cart"
+        android:background="@color/white" />
 
 </LinearLayout>
 

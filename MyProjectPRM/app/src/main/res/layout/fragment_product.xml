@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="#fff"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     tools:context=".ProductFragment">
-
-    <!-- Main Content -->
-    <LinearLayout
+    <EditText
+        android:id="@+id/edtSearch"
+        android:layout_toLeftOf="@id/soft"
+        android:layout_marginTop="0dp"
+        android:background="@color/white"
+        android:hint="What do you want?"
+        android:padding="0dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:drawableLeft="@drawable/ic_search"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
+        android:layout_height="wrap_content"/>
+    <!-- Main Content -->
+    <ImageView
+        android:id="@+id/soft"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
         <!-- RecyclerView for Product Listings -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/edtSearch"
+            tools:listitem="@layout/item_product"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:clipToPadding="false"
-            android:scrollbars="vertical"
-            android:background="@android:color/transparent" />
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-    </LinearLayout>
-
-</FrameLayout>
+</RelativeLayout>
