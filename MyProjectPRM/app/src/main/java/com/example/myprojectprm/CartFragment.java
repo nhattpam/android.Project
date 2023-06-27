@@ -109,9 +109,9 @@ public class CartFragment extends Fragment {
             updateCartUI();
 
             // Check if the cart has products and show a notification if it does
-            if (cartList.size() > 0) {
-                showNotificationIfNeeded();
-            }
+//            if (cartList.size() > 0) {
+//                showNotificationIfNeeded();
+//            }
 
             //remove item from cart
             cartAdapter.setRemoveItemClickListener(new CartAdapter.OnRemoveItemClickListener() {
@@ -250,29 +250,6 @@ public class CartFragment extends Fragment {
         }
     }
 
-
-    private boolean hasNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int result = ContextCompat.checkSelfPermission(requireContext(), PERMISSION_SHOW_CART_NOTIFICATION);
-            return result == PackageManager.PERMISSION_GRANTED;
-        }
-        return true;
-    }
-
-    private void showPermissionRationale() {
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Notification Permission")
-                .setMessage("The app needs notification permission to show cart updates.")
-                .setPositiveButton("Grant", (dialog, which) -> requestPermission())
-                .setNegativeButton("Cancel", (dialog, which) -> {
-                    // Handle the cancellation
-                })
-                .show();
-    }
-
-    private void requestPermission() {
-        ActivityCompat.requestPermissions(requireActivity(), new String[]{PERMISSION_SHOW_CART_NOTIFICATION}, REQUEST_NOTIFICATION_PERMISSION);
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

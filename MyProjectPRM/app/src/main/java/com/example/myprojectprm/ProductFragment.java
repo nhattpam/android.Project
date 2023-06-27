@@ -1,12 +1,21 @@
 package com.example.myprojectprm;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +30,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +51,12 @@ public class ProductFragment extends Fragment {
     private static final String COLUMN_PRODUCT_DESCRIPTION = "product_description";
     private static final String COLUMN_PRODUCT_PRICE = "product_price";
 
+    private static final String CHANNEL_ID = "cart_notification_channel";
+    private static final int NOTIFICATION_ID = 1;
+    private static final int REQUEST_NOTIFICATION_PERMISSION = 1;
+
+    private static List<Cart> cartList;
+
     private String loggedInUsername; // Variable to store the username of the logged-in user
 
     @Override
@@ -46,7 +65,22 @@ public class ProductFragment extends Fragment {
         // Inflate the layout for this fragment
 
         //notification when cart has products
-        
+        // Retrieve the saved cart data from SharedPreferences
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(AppConstants.CART_PREFS_NAME, MODE_PRIVATE);
+        String cartListJson = sharedPreferences.getString("cartList", "");
+
+        if (!cartListJson.isEmpty()) {
+            // Convert the JSON string back to the list of Cart objects using Gson
+            Gson gson = new Gson();
+            Type cartListType = new TypeToken<List<Cart>>() {}.getType();
+            cartList = gson.fromJson(cartListJson, cartListType);
+            if(cartList.size() > 0)
+            {
+                showNotificationIfNeeded();
+            }
+        }
+
+
 
         return inflater.inflate(R.layout.fragment_product, container, false);
     }
@@ -122,6 +156,53 @@ public class ProductFragment extends Fragment {
 
         db.close();
     }
+    //notify if cart has products
+    private void showNotificationIfNeeded() {
+        // Check if the cart has products and show a notification if it does
+        if (cartList.size() > 0) {
+            // Build and show the notification
+            buildAndShowNotification();
+        }
+    }
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_NOTIFICATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, build and show the notification
+                buildAndShowNotification();
+            } else {
+                // Permission denied, handle accordingly (e.g., show a message)
+                Toast.makeText(requireContext(), "Permission denied to show notifications", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void buildAndShowNotification() {
+        // Build the notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(), CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle("Cart Notification")
+                .setContentText("Your cart has products")
+                .setAutoCancel(true);
+
+        // Create a notification channel for Android Oreo and higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence channelName = "Cart Notifications";
+            String channelDescription = "Notification channel for cart updates";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, channelName, importance);
+            notificationChannel.setDescription(channelDescription);
+
+            // Register the channel with the system
+            NotificationManager notificationManager = requireContext().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+        // Show the notification
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(requireContext());
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
+    }
 
 }
