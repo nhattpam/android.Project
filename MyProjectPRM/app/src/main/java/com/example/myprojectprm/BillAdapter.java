@@ -1,5 +1,6 @@
 package com.example.myprojectprm;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.BillViewHolder
     @Override
     public BillViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_bill, parent, false);
-        return new BillViewHolder(view);
+        return new BillViewHolder(view, view.getContext());
     }
 
     @Override
@@ -46,8 +47,10 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.BillViewHolder
         private TextView quantityTextView;
         private TextView totalPriceTextView;
         private TextView orderDateTextView;
-        public BillViewHolder(@NonNull View itemView) {
+        private Context context; // Add a context variable
+        public BillViewHolder(@NonNull View itemView, Context context) {
             super(itemView);
+            this.context = context;
             billIdTextView = itemView.findViewById(R.id.bill_id_text_view);
             productIdTextView = itemView.findViewById(R.id.product_id_text_view);
             quantityTextView = itemView.findViewById(R.id.quantity_text_view);
@@ -56,8 +59,10 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.BillViewHolder
         }
 
         public void bind(Bill bill) {
+            DatabaseHelper databaseHelper = new DatabaseHelper(context);
+            String productName = databaseHelper.findProductNameByProductId(bill.getProductId());
             billIdTextView.setText("Bill ID: " + String.valueOf(bill.getBillId()));
-            productIdTextView.setText("Product ID: " + String.valueOf(bill.getProductId()));
+            productIdTextView.setText("Product ID: " + String.valueOf(productName));
             quantityTextView.setText("Quantity: " + String.valueOf(bill.getQuantity()));
             totalPriceTextView.setText("Total Price: " + String.valueOf(bill.getTotalPrice()) + " $");
             orderDateTextView.setText("Order Date: " + String.valueOf(bill.getOrderDate()));

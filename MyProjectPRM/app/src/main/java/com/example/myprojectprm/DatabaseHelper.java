@@ -181,6 +181,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userId;
     }
 
+    public String findProductNameByProductId(int productId) {
+        String productName = null;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT " + COLUMN_PRODUCT_NAME +
+                " FROM " + TABLE_PRODUCTS +
+                " WHERE " + COLUMN_PRODUCT_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(productId)});
+
+        if (cursor.moveToFirst()) {
+            productName = cursor.getString(cursor.getColumnIndex(COLUMN_PRODUCT_NAME));
+        }
+
+        cursor.close();
+        db.close();
+
+        return productName;
+    }
+
+
     public List<Bill> getBillsByUserId(int userId) {
         List<Bill> billList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
