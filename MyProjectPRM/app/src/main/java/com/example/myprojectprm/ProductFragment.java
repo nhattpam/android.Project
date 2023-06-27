@@ -76,7 +76,7 @@ public class ProductFragment extends Fragment {
             cartList = gson.fromJson(cartListJson, cartListType);
             if(cartList.size() > 0)
             {
-                showNotificationIfNeeded();
+//                showNotificationIfNeeded();
             }
         }
 

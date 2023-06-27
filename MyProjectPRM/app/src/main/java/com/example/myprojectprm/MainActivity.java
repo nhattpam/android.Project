@@ -2,19 +2,31 @@ package com.example.myprojectprm;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +39,12 @@ public class MainActivity extends AppCompatActivity {
     private ProfileFragment profileFragment;
 
     private String loggedInUsername; // Variable to store the username of the logged-in user
+
+    private static final String CHANNEL_ID = "cart_notification_channel";
+    private static final int NOTIFICATION_ID = 1;
+    private static final int REQUEST_NOTIFICATION_PERMISSION = 1;
+
+    private static List<Cart> cartList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +69,24 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the default fragment
         setFragment(productFragment);
+
+        //notification when cart has products
+        // Retrieve the saved cart data from SharedPreferences
+        // Retrieve the saved cart data from SharedPreferences
+        SharedPreferences sharedPreferences2 = getSharedPreferences(AppConstants.CART_PREFS_NAME, MODE_PRIVATE);
+        String cartListJson = sharedPreferences2.getString("cartList", "");
+
+
+        if (!cartListJson.isEmpty()) {
+            // Convert the JSON string back to the list of Cart objects using Gson
+            Gson gson = new Gson();
+            Type cartListType = new TypeToken<List<Cart>>() {}.getType();
+            cartList = gson.fromJson(cartListJson, cartListType);
+            if(cartList.size() > 0)
+            {
+                showNotificationIfNeeded();
+            }
+        }
 
         // Handle item selection events
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -143,6 +179,54 @@ public class MainActivity extends AppCompatActivity {
         finish(); // Finish the MainActivity to prevent returning to it when pressing back
     }
 
+    //notify if cart has products
+    private void showNotificationIfNeeded() {
+        // Check if the cart has products and show a notification if it does
+        if (cartList.size() > 0) {
+            // Build and show the notification
+            buildAndShowNotification();
+        }
+    }
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_NOTIFICATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, build and show the notification
+                buildAndShowNotification();
+            } else {
+                // Permission denied, handle accordingly (e.g., show a message)
+                Toast.makeText(this, "Permission denied to show notifications", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void buildAndShowNotification() {
+        // Build the notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle("Cart Notification")
+                .setContentText("Your cart has products")
+                .setAutoCancel(true);
+
+        // Create a notification channel for Android Oreo and higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence channelName = "Cart Notifications";
+            String channelDescription = "Notification channel for cart updates";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, channelName, importance);
+            notificationChannel.setDescription(channelDescription);
+
+            // Register the channel with the system
+            NotificationManager notificationManager = this.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+        // Show the notification
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
+    }
 
 }
