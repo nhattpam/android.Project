@@ -56,11 +56,11 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.BillViewHolder
         }
 
         public void bind(Bill bill) {
-            billIdTextView.setText(String.valueOf(bill.getBillId()));
-            productIdTextView.setText(String.valueOf(bill.getProductId()));
-            quantityTextView.setText(String.valueOf(bill.getQuantity()));
-            totalPriceTextView.setText(String.valueOf(bill.getTotalPrice()));
-            orderDateTextView.setText(String.valueOf(bill.getOrderDate()));
+            billIdTextView.setText("Bill ID: " + String.valueOf(bill.getBillId()));
+            productIdTextView.setText("Product ID: " + String.valueOf(bill.getProductId()));
+            quantityTextView.setText("Quantity: " + String.valueOf(bill.getQuantity()));
+            totalPriceTextView.setText("Total Price: " + String.valueOf(bill.getTotalPrice()) + " $");
+            orderDateTextView.setText("Order Date: " + String.valueOf(bill.getOrderDate()));
         }
     }
 }
