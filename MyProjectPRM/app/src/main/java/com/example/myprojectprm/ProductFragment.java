@@ -4,7 +4,9 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.SearchManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -36,10 +38,11 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import android.widget.SearchView;
 
 
 public class ProductFragment extends Fragment {
-
+    private SearchView searchView;
     private RecyclerView recyclerView;
     private ProductAdapter productAdapter;
     private List<Product> productList;
@@ -62,25 +65,6 @@ public class ProductFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-        //notification when cart has products
-        // Retrieve the saved cart data from SharedPreferences
-//        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(AppConstants.CART_PREFS_NAME, MODE_PRIVATE);
-//        String cartListJson = sharedPreferences.getString("cartList", "");
-//
-//        if (!cartListJson.isEmpty()) {
-//            // Convert the JSON string back to the list of Cart objects using Gson
-//            Gson gson = new Gson();
-//            Type cartListType = new TypeToken<List<Cart>>() {}.getType();
-//            cartList = gson.fromJson(cartListJson, cartListType);
-//            if(cartList.size() > 0)
-//            {
-////                showNotificationIfNeeded();
-//            }
-//        }
-
-
 
         return inflater.inflate(R.layout.fragment_product, container, false);
     }
@@ -97,7 +81,7 @@ public class ProductFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         productList = new ArrayList<>();
-        productAdapter = new ProductAdapter(productList);
+        productAdapter = new ProductAdapter(getActivity(), productList);
         recyclerView.setAdapter(productAdapter);
 
         databaseHelper = new DatabaseHelper(requireContext());
@@ -125,6 +109,29 @@ public class ProductFragment extends Fragment {
                         .commit();
             }
         });
+
+        //search
+        SearchManager searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
+
+        searchView = view.findViewById(R.id.edtSearch);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        //function search
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                productAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                productAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
 
     }
 
@@ -156,53 +163,6 @@ public class ProductFragment extends Fragment {
 
         db.close();
     }
-    //notify if cart has products
-//    private void showNotificationIfNeeded() {
-//        // Check if the cart has products and show a notification if it does
-//        if (cartList.size() > 0) {
-//            // Build and show the notification
-//            buildAndShowNotification();
-//        }
-//    }
 
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        if (requestCode == REQUEST_NOTIFICATION_PERMISSION) {
-//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                // Permission granted, build and show the notification
-//                buildAndShowNotification();
-//            } else {
-//                // Permission denied, handle accordingly (e.g., show a message)
-//                Toast.makeText(requireContext(), "Permission denied to show notifications", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
-//
-//    private void buildAndShowNotification() {
-//        // Build the notification
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(), CHANNEL_ID)
-//                .setSmallIcon(R.drawable.ic_notification)
-//                .setContentTitle("Cart Notification")
-//                .setContentText("Your cart has products")
-//                .setAutoCancel(true);
-//
-//        // Create a notification channel for Android Oreo and higher
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            CharSequence channelName = "Cart Notifications";
-//            String channelDescription = "Notification channel for cart updates";
-//            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-//            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, channelName, importance);
-//            notificationChannel.setDescription(channelDescription);
-//
-//            // Register the channel with the system
-//            NotificationManager notificationManager = requireContext().getSystemService(NotificationManager.class);
-//            notificationManager.createNotificationChannel(notificationChannel);
-//        }
-//
-//        // Show the notification
-//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(requireContext());
-//        notificationManager.notify(NOTIFICATION_ID, builder.build());
-//    }
 
 }
