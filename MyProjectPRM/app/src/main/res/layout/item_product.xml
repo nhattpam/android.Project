@@ -1,71 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- product_item.xml -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_item"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp"
-    android:orientation="horizontal">
+    android:layout_margin="5dp"
+    android:radius="20dp">
 
-    <!-- Product image -->
-    <ImageView
-        android:id="@+id/iv_product_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/hp" />
-
-    <!-- Product details -->
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@id/iv_product_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <!-- Product name -->
-        <TextView
-            android:id="@+id/tv_product_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Product Name"
-            android:textSize="16sp"
-            android:textColor="#00AC47"
-            android:textStyle="bold" />
-
-        <!-- Product description -->
-        <TextView
-            android:id="@+id/tv_product_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#676767"
-            android:text="Detail"
-            android:textSize="14sp" />
-
-        <!-- Product price -->
-        <TextView
-            android:id="@+id/tv_product_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Product Price"
-            android:textSize="14sp" />
-    </LinearLayout>
-
-    <!-- Add to Cart icon -->
-    <ImageButton
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:id="@+id/btn_add_to_cart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:src="@drawable/ic_add_cart" />
-    <View
-        android:layout_marginTop="5dp"
-        android:background="#E6E6E6"
-        android:layout_below="@id/iv_product_image"
+    <RelativeLayout
+        android:id="@+id/layout_item"
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>
-</RelativeLayout>
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:orientation="horizontal">
 
+        <!-- Product image -->
+        <ImageView
+            android:id="@+id/iv_product_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/hp" />
+
+        <!-- Product details -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/iv_product_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <!-- Product name -->
+            <TextView
+                android:id="@+id/tv_product_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product Name"
+                android:textSize="16sp"
+                android:textColor="#00AC47"
+                android:textStyle="bold" />
+
+            <!-- Product description -->
+            <TextView
+                android:id="@+id/tv_product_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#676767"
+                android:text="Detail"
+                android:textSize="14sp" />
+
+            <!-- Product price -->
+            <TextView
+                android:id="@+id/tv_product_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product Price"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Add to Cart icon -->
+        <ImageButton
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:id="@+id/btn_add_to_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:src="@drawable/ic_add_cart" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
