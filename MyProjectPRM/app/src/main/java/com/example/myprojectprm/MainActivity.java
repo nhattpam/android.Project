@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -86,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
             {
                 showNotificationIfNeeded();
             }
+        }
+
+        // Check if the openCartFragment flag is set
+        if (getIntent().getBooleanExtra("openCartFragment", false)) {
+            openCartFragment();
         }
 
         // Handle item selection events
@@ -204,12 +210,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void buildAndShowNotification() {
+        Intent mainIntent = new Intent(this, MainActivity.class);
+        mainIntent.putExtra("openCartFragment", true);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_ONE_SHOT);
         // Build the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle("Cart Notification")
                 .setContentText("Your cart has products")
-                .setAutoCancel(true);
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent);
 
         // Create a notification channel for Android Oreo and higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
