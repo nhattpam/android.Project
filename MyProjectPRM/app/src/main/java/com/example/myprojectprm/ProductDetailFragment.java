@@ -47,7 +47,7 @@ public class ProductDetailFragment extends Fragment {
                 ivProductImage.setImageResource(product.getImageResourceId());
                 tvProductName.setText(product.getName());
                 tvProductDescription.setText(product.getDescription());
-                tvProductPrice.setText(product.getPrice());
+                tvProductPrice.setText("$ " + product.getPrice());
             }
         }
 

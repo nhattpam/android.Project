@@ -12,7 +12,7 @@
         android:layout_toLeftOf="@id/soft"
         android:layout_marginTop="0dp"
         android:background="@color/white"
-        android:hint="What do you want?"
+        android:queryHint="What do you want?"
         android:padding="0dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"

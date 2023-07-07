@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#676767"
-            android:text="Product Description"
+            android:text="Detail"
             android:textSize="14sp" />
 
         <!-- Product price -->

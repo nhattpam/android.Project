@@ -168,7 +168,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         public void bind(Product product) {
             ivProductImage.setImageResource(product.getImageResourceId());
             tvProductName.setText(product.getName());
-            tvProductPrice.setText(product.getPrice());
+            tvProductPrice.setText("$ " + product.getPrice());
         }
 
 
