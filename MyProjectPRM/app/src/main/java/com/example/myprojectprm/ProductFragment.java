@@ -30,6 +30,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -37,6 +38,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import android.widget.SearchView;
 
@@ -129,6 +132,37 @@ public class ProductFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 productAdapter.getFilter().filter(newText);
                 return false;
+            }
+        });
+
+        //sort by price
+        ImageView sortImageView = view.findViewById(R.id.iv_sort);
+
+        final boolean[] ascendingOrder = {true};
+
+        sortImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ascendingOrder[0] = !ascendingOrder[0];
+
+                Collections.sort(productList, new Comparator<Product>() {
+                    @Override
+                    public int compare(Product p1, Product p2) {
+                        double price1 = Double.parseDouble(p1.getPrice());
+                        double price2 = Double.parseDouble(p2.getPrice());
+
+                        int result;
+                        if (ascendingOrder[0]) {
+                            result = Double.compare(price1, price2);
+                        } else {
+                            result = Double.compare(price2, price1);
+                        }
+
+                        return result;
+                    }
+                });
+
+                productAdapter.notifyDataSetChanged();
             }
         });
 

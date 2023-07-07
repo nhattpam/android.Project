@@ -9,7 +9,7 @@
     tools:context=".ProductFragment">
     <SearchView
         android:id="@+id/edtSearch"
-        android:layout_toLeftOf="@id/soft"
+        android:layout_toLeftOf="@id/iv_sort"
         android:layout_marginTop="0dp"
         android:background="@color/white"
         android:queryHint="What do you want?"
@@ -23,12 +23,16 @@
         />
     <!-- Main Content -->
     <ImageView
-        android:id="@+id/soft"
+        android:id="@+id/iv_sort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_filter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="Sort"
+        />
         <!-- RecyclerView for Product Listings -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
