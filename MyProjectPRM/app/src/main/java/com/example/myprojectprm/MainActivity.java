@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
 
         // Navigate back to the login screen
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        Intent intent = new Intent(MainActivity.this, StartActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish(); // Finish the MainActivity to prevent returning to it when pressing back

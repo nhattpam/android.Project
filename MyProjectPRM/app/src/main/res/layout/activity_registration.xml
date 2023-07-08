@@ -48,4 +48,13 @@
         android:textColor="#FFFFFF"
         android:background="@drawable/button_rounded_bg" />
 
+    <TextView
+        android:id="@+id/tv_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_register"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Already have an account? Log In"
+        android:textColor="#000000" />
 </RelativeLayout>

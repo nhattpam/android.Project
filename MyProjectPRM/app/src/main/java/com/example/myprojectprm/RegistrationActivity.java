@@ -2,16 +2,21 @@ package com.example.myprojectprm;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class RegistrationActivity extends AppCompatActivity {
 
     private EditText etUsername, etPassword;
     private Button btnRegister;
+
+    private TextView btnLogin;
+
 
     private DatabaseHelper databaseHelper;
 
@@ -23,6 +28,9 @@ public class RegistrationActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
         btnRegister = findViewById(R.id.btn_register);
+
+        //login button
+        btnLogin = findViewById(R.id.tv_login);
 
         databaseHelper = new DatabaseHelper(this);
 
@@ -41,6 +49,15 @@ public class RegistrationActivity extends AppCompatActivity {
                     Toast.makeText(RegistrationActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
                     finish();
                 }
+            }
+        });
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
