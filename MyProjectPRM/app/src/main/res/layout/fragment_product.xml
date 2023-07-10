@@ -7,40 +7,61 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProductFragment">
+
     <SearchView
         android:id="@+id/edtSearch"
-        android:layout_toLeftOf="@id/iv_sort"
-        android:layout_marginTop="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:queryHint="What do you want?"
         android:padding="0dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:drawableLeft="@drawable/ic_search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+
+    <LinearLayout
+        android:id="@+id/bannerLayout"
+        android:layout_below="@id/edtSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        />
+        android:orientation="horizontal">
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <LinearLayout
+            android:id="@+id/indicatorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal" />
+
+    </LinearLayout>
+
     <!-- Main Content -->
     <ImageView
         android:id="@+id/iv_sort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="8dp"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_filter"
         android:clickable="true"
         android:focusable="true"
         android:contentDescription="Sort"
-        />
-        <!-- RecyclerView for Product Listings -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_marginTop="5dp"
-            android:layout_below="@id/edtSearch"
-            tools:listitem="@layout/item_product"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        android:layout_alignParentEnd="true" />
+
+    <!-- RecyclerView for Product Listings -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/bannerLayout"
+        tools:listitem="@layout/item_product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </RelativeLayout>
