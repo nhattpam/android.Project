@@ -47,7 +47,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 } else {
                     databaseHelper.addUser(username, password, RegistrationActivity.this);
                     Toast.makeText(RegistrationActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
-                    finish();
+//                    finish();
                 }
             }
         });
