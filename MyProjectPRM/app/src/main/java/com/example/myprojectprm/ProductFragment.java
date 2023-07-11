@@ -22,9 +22,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,9 +32,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -44,8 +43,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import android.widget.SearchView;
+import com.google.android.material.tabs.TabLayout;
+
 
 
 public class ProductFragment extends Fragment {
@@ -67,15 +67,6 @@ public class ProductFragment extends Fragment {
 
     private static List<Cart> cartList;
 
-    //banner
-    private ViewPager viewPager;
-    private LinearLayout indicatorLayout;
-    private int[] bannerImages = {R.drawable.banner1, R.drawable.banner2, R.drawable.banner3, R.drawable.banner4, R.drawable.banner5};
-
-    //auto change banner
-    private static final long BANNER_CHANGE_INTERVAL = 3000; // Change image every 3 seconds
-    private Handler bannerHandler;
-    private Runnable bannerRunnable;
     private String loggedInUsername; // Variable to store the username of the logged-in user
 
     @Override
@@ -180,34 +171,27 @@ public class ProductFragment extends Fragment {
         });
 
         //banner
-        // Set up the banner
-        viewPager = view.findViewById(R.id.viewPager);
-        indicatorLayout = view.findViewById(R.id.indicatorLayout);
+        ViewPager2 carouselViewPager = view.findViewById(R.id.carouselViewPager);
+        TabLayout tabLayout = view.findViewById(R.id.tabLayout);
 
-        BannerPagerAdapter bannerPagerAdapter = new BannerPagerAdapter();
-        viewPager.setAdapter(bannerPagerAdapter);
+// Create a list of carousel items
+        List<CarouselItem> carouselItems = new ArrayList<>();
+        carouselItems.add(new CarouselItem(R.drawable.banner1));
+        carouselItems.add(new CarouselItem(R.drawable.banner2));
+        carouselItems.add(new CarouselItem(R.drawable.banner3));
+        carouselItems.add(new CarouselItem(R.drawable.banner4));
+        carouselItems.add(new CarouselItem(R.drawable.banner5));
 
-        // Add indicator dots
-        addIndicatorDots(0);
+// Create an adapter for the carousel items
+        CarouselAdapter carouselAdapter = new CarouselAdapter(carouselItems);
+        carouselViewPager.setAdapter(carouselAdapter);
 
-        // Start automatic banner image change
-        startBannerAutoChange();
-
-        // ViewPager page change listener
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                addIndicatorDots(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+// Connect the TabLayout with the ViewPager2
+        new TabLayoutMediator(tabLayout, carouselViewPager,
+                (tab, position) -> {
+                    // Set tab titles if needed
+                    // tab.setText("Tab " + (position + 1));
+                }).attach();
 
 
     }
@@ -262,90 +246,6 @@ public class ProductFragment extends Fragment {
         product.setId((int) productId);
 
         db.close();
-    }
-
-    //banner
-    private void addIndicatorDots(int currentPosition) {
-        indicatorLayout.removeAllViews();
-
-        for (int i = 0; i < bannerImages.length; i++) {
-            ImageView dot = new ImageView(requireContext());
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
-            params.setMargins(8, 0, 8, 0);
-            dot.setLayoutParams(params);
-
-            if (i == currentPosition) {
-                dot.setImageResource(R.drawable.indicator_dot_selected);
-            } else {
-                dot.setImageResource(R.drawable.indicator_dot);
-            }
-
-            indicatorLayout.addView(dot);
-        }
-    }
-
-    private class BannerPagerAdapter extends androidx.viewpager.widget.PagerAdapter {
-
-        @Override
-        public int getCount() {
-            return bannerImages.length;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            View itemView = LayoutInflater.from(container.getContext()).inflate(R.layout.item_banner, container, false);
-            ImageView imageView = itemView.findViewById(R.id.bannerImageView);
-            imageView.setImageResource(bannerImages[position]);
-            container.addView(itemView);
-            return itemView;
-        }
-
-        @Override
-        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-            container.removeView((View) object);
-        }
-    }
-
-    //auto change banner
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        // Stop the banner auto-change when the view is destroyed
-        stopBannerAutoChange();
-    }
-
-    private void startBannerAutoChange() {
-        bannerHandler = new Handler();
-        bannerRunnable = new Runnable() {
-            @Override
-            public void run() {
-                int currentPosition = viewPager.getCurrentItem();
-                int newPosition = currentPosition + 1;
-                if (newPosition >= bannerImages.length) {
-                    newPosition = 0;
-                }
-                viewPager.setCurrentItem(newPosition);
-                bannerHandler.postDelayed(this, BANNER_CHANGE_INTERVAL);
-            }
-        };
-        bannerHandler.postDelayed(bannerRunnable, BANNER_CHANGE_INTERVAL);
-    }
-
-    private void stopBannerAutoChange() {
-        if (bannerHandler != null && bannerRunnable != null) {
-            bannerHandler.removeCallbacks(bannerRunnable);
-            bannerHandler = null;
-            bannerRunnable = null;
-        }
     }
 
 
