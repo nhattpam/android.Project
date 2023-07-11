@@ -1,25 +1,20 @@
 package com.example.myprojectprm;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
-import android.util.AttributeSet;
-import android.view.Gravity;
-import android.widget.LinearLayout;
-import androidx.core.content.ContextCompat;
-
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 public class CircleIndicatorView extends LinearLayout {
     private static final int INDICATOR_RADIUS_DP = 8;
     private static final int INDICATOR_SPACING_DP = 8;
-    private static final int INDICATOR_COLOR_SELECTED = Color.RED;
+    private static final int INDICATOR_COLOR_SELECTED = 0xFFFF9900;
     private static final int INDICATOR_COLOR_UNSELECTED = Color.GRAY;
 
     private int indicatorSize;
@@ -69,19 +64,47 @@ public class CircleIndicatorView extends LinearLayout {
         removeAllViews();
 
         for (int i = 0; i < itemCount; i++) {
-            View indicator = new View(getContext());
+            Drawable indicator = createIndicatorDrawable(i == selectedItemPosition);
+
+            View indicatorView = new View(getContext());
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(indicatorSize, indicatorSize);
             params.setMargins(indicatorSpacing, 0, indicatorSpacing, 0);
-            indicator.setLayoutParams(params);
+            indicatorView.setLayoutParams(params);
+            indicatorView.setBackground(indicator);
 
-            if (i == selectedItemPosition) {
-                indicator.setBackgroundColor(selectedIndicatorColor);
-            } else {
-                indicator.setBackgroundColor(unselectedIndicatorColor);
+            addView(indicatorView);
+        }
+    }
+
+    private Drawable createIndicatorDrawable(boolean isSelected) {
+        Drawable drawable = new Drawable() {
+            @Override
+            public void draw(Canvas canvas) {
+                int radius = indicatorSize / 2;
+                int centerX = canvas.getWidth() / 2;
+                int centerY = canvas.getHeight() / 2;
+
+                paint.setColor(isSelected ? selectedIndicatorColor : unselectedIndicatorColor);
+                canvas.drawCircle(centerX, centerY, radius, paint);
             }
 
-            addView(indicator);
-        }
+            @Override
+            public void setAlpha(int alpha) {
+                // Not used
+            }
+
+            @Override
+            public void setColorFilter(ColorFilter colorFilter) {
+                // Not used
+            }
+
+            @Override
+            public int getOpacity() {
+                return PixelFormat.TRANSLUCENT;
+            }
+        };
+
+        return drawable;
     }
 
     public void selectIndicator(int position) {
@@ -91,18 +114,14 @@ public class CircleIndicatorView extends LinearLayout {
 
     private void updateIndicators() {
         for (int i = 0; i < getChildCount(); i++) {
-            View indicator = getChildAt(i);
-
-            if (i == selectedItemPosition) {
-                indicator.setBackgroundColor(selectedIndicatorColor);
-            } else {
-                indicator.setBackgroundColor(unselectedIndicatorColor);
-            }
+            Drawable indicator = createIndicatorDrawable(i == selectedItemPosition);
+            View indicatorView = getChildAt(i);
+            indicatorView.setBackground(indicator);
         }
     }
 
     private int dpToPx(int dp) {
-        float density = getContext().getResources().getDisplayMetrics().density;
+        float density = getResources().getDisplayMetrics().density;
         return Math.round(dp * density);
     }
 }
