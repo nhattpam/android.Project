@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,11 +44,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
 import android.widget.SearchView;
+
 import com.google.android.material.tabs.TabLayout;
 import com.example.myprojectprm.CircleIndicatorView;
-
-
 
 
 public class ProductFragment extends Fragment {
@@ -71,7 +72,15 @@ public class ProductFragment extends Fragment {
 
     private String loggedInUsername; // Variable to store the username of the logged-in user
 
+    //banner
+    //change banner auto
+    private static final long BANNER_DELAY_MS = 3000; // Delay between banner image changes in milliseconds
+    private Handler bannerHandler;
+    private Runnable bannerRunnable;
+    private ViewPager2 carouselViewPager; // Declare carouselViewPager variable here
     private CircleIndicatorView indicatorView;
+    List<CarouselItem> carouselItems;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -175,10 +184,10 @@ public class ProductFragment extends Fragment {
         });
 
         //banner
-        ViewPager2 carouselViewPager = view.findViewById(R.id.carouselViewPager);
+         carouselViewPager = view.findViewById(R.id.carouselViewPager);
 
 // Create a list of carousel items
-        List<CarouselItem> carouselItems = new ArrayList<>();
+        carouselItems = new ArrayList<>();
         carouselItems.add(new CarouselItem(R.drawable.banner1));
         carouselItems.add(new CarouselItem(R.drawable.banner2));
         carouselItems.add(new CarouselItem(R.drawable.banner3));
@@ -189,7 +198,9 @@ public class ProductFragment extends Fragment {
         CarouselAdapter carouselAdapter = new CarouselAdapter(carouselItems);
         carouselViewPager.setAdapter(carouselAdapter);
 
-    //indicator dot
+
+
+        //indicator dot
         indicatorView = view.findViewById(R.id.indicatorView);
         indicatorView.setIndicators(carouselItems.size());
 
@@ -200,6 +211,11 @@ public class ProductFragment extends Fragment {
                 indicatorView.selectIndicator(position);
             }
         });
+
+        //auto change banner
+        startBannerAutoChange();
+
+
 
     }
 
@@ -255,5 +271,33 @@ public class ProductFragment extends Fragment {
         db.close();
     }
 
+
+    //auto change banenr method
+    private void startBannerAutoChange() {
+        bannerHandler = new Handler();
+        bannerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                int currentItem = carouselViewPager.getCurrentItem();
+                int nextItem = currentItem + 1;
+                if (nextItem >= carouselItems.size()) {
+                    nextItem = 0; // Wrap around to the first item
+                }
+                carouselViewPager.setCurrentItem(nextItem);
+                bannerHandler.postDelayed(this, BANNER_DELAY_MS);
+            }
+        };
+        bannerHandler.postDelayed(bannerRunnable, BANNER_DELAY_MS);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (bannerHandler != null && bannerRunnable != null) {
+            bannerHandler.removeCallbacks(bannerRunnable);
+            bannerHandler = null;
+            bannerRunnable = null;
+        }
+    }
 
 }

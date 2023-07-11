@@ -1,5 +1,6 @@
 package com.example.myprojectprm;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,11 +8,14 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import java.util.List;
 
 public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.CarouselViewHolder> {
     private List<CarouselItem> carouselItems;
+
+
 
     public CarouselAdapter(List<CarouselItem> carouselItems) {
         this.carouselItems = carouselItems;
@@ -41,10 +45,13 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
         public CarouselViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.carouselImageView);
+
         }
 
         public void bind(CarouselItem item) {
             imageView.setImageResource(item.getImageResId());
         }
     }
+
+
 }
