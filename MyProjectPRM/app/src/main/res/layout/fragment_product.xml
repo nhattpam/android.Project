@@ -1,9 +1,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#fff"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     tools:context=".ProductFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -12,8 +12,8 @@
         android:layout_height="0dp"
         android:layout_marginTop="5dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@+id/carouselLayout"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/carouselLayout"
         tools:listitem="@layout/item_product" />
 
     <LinearLayout
@@ -21,26 +21,23 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/edtSearch"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/edtSearch">
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/carouselViewPager"
             android:layout_width="match_parent"
             android:layout_height="200dp" />
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
+        <com.example.myprojectprm.CircleIndicatorView
+            android:id="@+id/indicatorView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            app:tabBackground="?attr/selectableItemBackground"
-            app:tabGravity="center"
-            app:tabIndicatorColor="#808080"
-            app:tabIndicatorHeight="2dp"
-            app:tabMode="fixed"
-            app:tabTextColor="#808080" />
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            app:indicatorSize="8dp"
+           />
+
 
     </LinearLayout>
 
@@ -48,28 +45,28 @@
         android:id="@+id/edtSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:background="@color/white"
-        android:queryHint="What do you want?"
-        android:padding="0dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginTop="0dp"
         android:layout_marginRight="5dp"
+        android:background="@color/white"
         android:drawableLeft="@drawable/ic_search"
+        android:padding="0dp"
+        android:queryHint="What do you want?"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/iv_sort"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/iv_sort" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/iv_sort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:src="@drawable/ic_filter"
         android:clickable="true"
-        android:focusable="true"
         android:contentDescription="Sort"
-        app:layout_constraintTop_toTopOf="@id/edtSearch"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:focusable="true"
+        android:src="@drawable/ic_filter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/edtSearch" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

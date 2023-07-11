@@ -45,6 +45,8 @@ import java.util.Comparator;
 import java.util.List;
 import android.widget.SearchView;
 import com.google.android.material.tabs.TabLayout;
+import com.example.myprojectprm.CircleIndicatorView;
+
 
 
 
@@ -68,6 +70,8 @@ public class ProductFragment extends Fragment {
     private static List<Cart> cartList;
 
     private String loggedInUsername; // Variable to store the username of the logged-in user
+
+    private CircleIndicatorView indicatorView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -172,7 +176,6 @@ public class ProductFragment extends Fragment {
 
         //banner
         ViewPager2 carouselViewPager = view.findViewById(R.id.carouselViewPager);
-        TabLayout tabLayout = view.findViewById(R.id.tabLayout);
 
 // Create a list of carousel items
         List<CarouselItem> carouselItems = new ArrayList<>();
@@ -186,13 +189,17 @@ public class ProductFragment extends Fragment {
         CarouselAdapter carouselAdapter = new CarouselAdapter(carouselItems);
         carouselViewPager.setAdapter(carouselAdapter);
 
-// Connect the TabLayout with the ViewPager2
-        new TabLayoutMediator(tabLayout, carouselViewPager,
-                (tab, position) -> {
-                    // Set tab titles if needed
-                    // tab.setText("Tab " + (position + 1));
-                }).attach();
+    //indicator dot
+        indicatorView = view.findViewById(R.id.indicatorView);
+        indicatorView.setIndicators(carouselItems.size());
 
+        // Update the selected indicator when the carousel page changes
+        carouselViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                indicatorView.selectIndicator(position);
+            }
+        });
 
     }
 

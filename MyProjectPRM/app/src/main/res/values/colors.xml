@@ -12,4 +12,6 @@
     <color name="main_color">#8adcde</color>
     <color name="amazon_yellow">#FF9900</color>
     <color name="amazon_yellow_dark">#FF9900</color>
+    <color name="indicator_selected">#FF0000</color>
+    <color name="indicator_unselected">#C0C0C0</color>
 </resources>
