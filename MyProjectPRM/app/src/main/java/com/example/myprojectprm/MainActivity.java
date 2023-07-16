@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    //cart icon
+    //menu bar: cart, logout
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -148,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
             openCartFragment();
             return true;
         } else if(itemId == R.id.action_logout){
+            //Logout: khang
             logoutUser();
             return true;
         }
@@ -168,6 +169,8 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack(null) // Add the fragment to the back stack to enable back navigation
                 .commit();
     }
+
+    //Logout: khang
 
     private void logoutUser() {
         // Clear the saved username and password from SharedPreferences

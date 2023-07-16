@@ -51,6 +51,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.example.myprojectprm.CircleIndicatorView;
 
 
+// List Product: Thanh
 public class ProductFragment extends Fragment {
     private SearchView searchView;
     private RecyclerView recyclerView;
@@ -130,7 +131,8 @@ public class ProductFragment extends Fragment {
             }
         });
 
-        //search
+
+        //Search : Peter
         SearchManager searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
 
         searchView = view.findViewById(R.id.edtSearch);
@@ -152,7 +154,7 @@ public class ProductFragment extends Fragment {
             }
         });
 
-        //sort by price
+        //sort by price: ham Filter theo gia
         ImageView sortImageView = view.findViewById(R.id.iv_sort);
 
         final boolean[] ascendingOrder = {true};

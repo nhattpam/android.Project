@@ -86,6 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    //register ng dung trong ham register
     public void addUser(String username, String password, Context context) {
         SQLiteDatabase db = null;
         try {
@@ -104,6 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    //check username ton tai trong ham register
     public boolean isUsernameExists(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
 

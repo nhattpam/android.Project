@@ -173,7 +173,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
 
     }
-    //ham search
+    //ham search nam trong Product Fragment
     @Override
     public Filter getFilter() {
 

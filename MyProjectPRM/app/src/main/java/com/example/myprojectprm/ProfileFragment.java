@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 
+//Profile: Peter
 public class ProfileFragment extends Fragment {
     private RecyclerView recyclerViewBills;
     private BillAdapter billAdapter;

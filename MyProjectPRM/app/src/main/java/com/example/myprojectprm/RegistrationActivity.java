@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//Register: Khang
 public class RegistrationActivity extends AppCompatActivity {
 
     private EditText etUsername, etPassword;

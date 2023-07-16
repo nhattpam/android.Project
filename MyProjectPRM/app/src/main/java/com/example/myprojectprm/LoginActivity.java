@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//Login: Khang
 public class LoginActivity extends AppCompatActivity {
     private EditText etUsername, etPassword;
     private Button btnLogin;
