@@ -21,6 +21,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_USER_ID = "user_id";
     private static final String COLUMN_USERNAME = "username";
     private static final String COLUMN_PASSWORD = "password";
+
+    private static final String COLUMN_FULLNAME = "fullName";
+
+    private static final String COLUMN_ADDRESS = "address";
+
     // Product table columns
     private static final String COLUMN_PRODUCT_ID = "product_id";
     private static final String COLUMN_PRODUCT_NAME = "product_name";
@@ -47,7 +52,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "(" +
                 COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COLUMN_USERNAME + " TEXT," +
-                COLUMN_PASSWORD + " TEXT" +
+                COLUMN_PASSWORD + " TEXT," +
+                COLUMN_FULLNAME + " TEXT," +
+                COLUMN_ADDRESS + " TEXT" +
                 ")";
         db.execSQL(CREATE_USERS_TABLE);
 
@@ -87,13 +94,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //register ng dung trong ham register
-    public void addUser(String username, String password, Context context) {
+    public void addUser(String username, String password, String fullName, String address, Context context) {
         SQLiteDatabase db = null;
         try {
             db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put(COLUMN_USERNAME, username);
             values.put(COLUMN_PASSWORD, password);
+            values.put(COLUMN_FULLNAME, fullName);
+            values.put(COLUMN_ADDRESS, address);
+
             db.insert(TABLE_USERS, null, values);
         } catch (Exception e) {
             e.printStackTrace();
