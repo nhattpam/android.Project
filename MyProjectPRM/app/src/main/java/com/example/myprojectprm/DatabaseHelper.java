@@ -242,7 +242,60 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return billList;
     }
 
+    //my profile
+    public ContentValues populateUserProfile(String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues contentValues = new ContentValues();
 
+        String[] columns = {COLUMN_USERNAME, COLUMN_PASSWORD, COLUMN_FULLNAME, COLUMN_ADDRESS};
+        String selection = COLUMN_USERNAME + " = ?";
+        String[] selectionArgs = {username};
+
+        Cursor cursor = db.query(
+                TABLE_USERS,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        if (cursor.moveToFirst()) {
+            String fetchedUsername = cursor.getString(cursor.getColumnIndex(COLUMN_USERNAME));
+            String password = cursor.getString(cursor.getColumnIndex(COLUMN_PASSWORD));
+            String fullName = cursor.getString(cursor.getColumnIndex(COLUMN_FULLNAME));
+            String address = cursor.getString(cursor.getColumnIndex(COLUMN_ADDRESS));
+
+            contentValues.put(COLUMN_USERNAME, fetchedUsername);
+            contentValues.put(COLUMN_PASSWORD, password);
+            contentValues.put(COLUMN_FULLNAME, fullName);
+            contentValues.put(COLUMN_ADDRESS, address);
+        }
+
+        cursor.close();
+        db.close();
+
+        return contentValues;
+    }
+
+
+
+    public boolean updateUser(String username, String password, String fullName, String address) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USERNAME, username);
+        values.put(COLUMN_PASSWORD, password);
+        values.put(COLUMN_FULLNAME, fullName);
+        values.put(COLUMN_ADDRESS, address);
+
+        // Update the user's profile in the database
+        int rowsAffected = db.update(TABLE_USERS, values, COLUMN_USERNAME + "=?", new String[]{username});
+        db.close();
+
+        // Check if the update was successful
+        return rowsAffected > 0;
+    }
 
 }
 

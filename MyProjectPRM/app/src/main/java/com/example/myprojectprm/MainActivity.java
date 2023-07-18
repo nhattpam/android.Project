@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private ChatFragment chatFragment;
     private ProfileFragment profileFragment;
 
+    private MyProfileFragment myProfileFragment;
+
     private String loggedInUsername; // Variable to store the username of the logged-in user
 
     private static final String CHANNEL_ID = "cart_notification_channel";
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         mapFragment = new MapFragment();
         chatFragment = new ChatFragment();
         profileFragment = new ProfileFragment();
+        myProfileFragment = new MyProfileFragment();
 
         // Set the default fragment
         setFragment(productFragment);
@@ -110,6 +113,9 @@ public class MainActivity extends AppCompatActivity {
 //                        return true;
                     case R.id.menu_profile:
                         setFragment(profileFragment);
+                        return true;
+                    case R.id.menu_my_profile:
+                        setFragment(myProfileFragment);
                         return true;
                 }
                 return false;

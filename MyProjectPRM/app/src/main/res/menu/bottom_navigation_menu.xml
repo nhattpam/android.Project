@@ -33,4 +33,12 @@
         app:showAsAction="always"
         android:iconTint="@color/amazon_yellow"
         android:titleTextColor="@color/amazon_yellow" />
+
+    <item
+        android:id="@+id/menu_my_profile"
+        android:title="Profile"
+        android:icon="@drawable/ic_my_profile"
+        app:showAsAction="always"
+        android:iconTint="@color/amazon_yellow"
+        android:titleTextColor="@color/amazon_yellow" />
 </menu>
