@@ -84,7 +84,7 @@ public class CartFragment extends Fragment  {
 
         // Initialize the AutoReadOtpHelper here
         autoReadOtpHelper = new AutoReadOtpHelper(requireActivity());
-        
+
 
         retrieveSavedCartData();
 
@@ -179,10 +179,13 @@ public class CartFragment extends Fragment  {
 
 // Get the user profile data from the database
                 ContentValues userContentValues = databaseHelper.populateUserProfile(loggedInUsername);
+                String fullName = "";
+                String phone = "";
+                String address = "";
                 if (userContentValues != null) {
-                    String fullName = userContentValues.getAsString("fullName");
-                    String address = userContentValues.getAsString("address");
-                    String phone = userContentValues.getAsString("phone");
+                    fullName= userContentValues.getAsString("fullName");
+                    address = userContentValues.getAsString("address");
+                    phone = userContentValues.getAsString("phone");
                     Log.d("daylaten", fullName);
                 }
 
@@ -190,10 +193,10 @@ public class CartFragment extends Fragment  {
                 JSONObject object = new JSONObject();
                 try {
                     // to put name
-                    object.put("name", "Geeks for Geeks");
+                    object.put("name", fullName);
 
                     // put description
-                    object.put("description", "Test payment");
+                    object.put("description", "Payment processing");
 
                     // to set theme color
                     object.put("theme.color", "");
@@ -205,10 +208,10 @@ public class CartFragment extends Fragment  {
                     object.put("amount", amount);
 
                     // put mobile number
-                    object.put("prefill.contact", "9284064503");
+                    object.put("prefill.contact", phone);
 
                     // put email
-                    object.put("prefill.email", "chaitanyamunje@gmail.com");
+                    object.put("prefill.email", address);
 
                     // open razorpay to checkout activity
                     checkout.open(requireActivity(), object);
@@ -248,6 +251,7 @@ public class CartFragment extends Fragment  {
             // Save the bill details using the productId, quantity, and username
             databaseHelper.addBill(productId, quantity, getUserId(), calculateTotalPrice(), orderDate);
         }
+
     }
 
     private void setupRecyclerView() {

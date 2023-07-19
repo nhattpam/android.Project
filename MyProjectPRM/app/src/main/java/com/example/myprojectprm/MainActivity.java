@@ -279,6 +279,15 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
                         .commitAllowingStateLoss(); // Use commitAllowingStateLoss to prevent the IllegalStateException
             }
         });
+
+        // Clear the cart data from SharedPreferences
+        SharedPreferences sharedPreferences = this.getSharedPreferences(AppConstants.CART_PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        // Clear the cart list in CartFragment
+        CartFragment.getCartList().clear();
     }
 
     @Override
