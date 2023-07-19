@@ -26,6 +26,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String COLUMN_ADDRESS = "address";
 
+    private static final String COLUMN_PHONE = "phone";
+
     // Product table columns
     private static final String COLUMN_PRODUCT_ID = "product_id";
     private static final String COLUMN_PRODUCT_NAME = "product_name";
@@ -54,7 +56,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_USERNAME + " TEXT," +
                 COLUMN_PASSWORD + " TEXT," +
                 COLUMN_FULLNAME + " TEXT," +
-                COLUMN_ADDRESS + " TEXT" +
+                COLUMN_ADDRESS + " TEXT," +
+                COLUMN_PHONE + " TEXT" +
                 ")";
         db.execSQL(CREATE_USERS_TABLE);
 
@@ -94,7 +97,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //register ng dung trong ham register
-    public void addUser(String username, String password, String fullName, String address, Context context) {
+    public void addUser(String username, String password, String fullName, String address,String phone, Context context) {
         SQLiteDatabase db = null;
         try {
             db = this.getWritableDatabase();
@@ -103,6 +106,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(COLUMN_PASSWORD, password);
             values.put(COLUMN_FULLNAME, fullName);
             values.put(COLUMN_ADDRESS, address);
+            values.put(COLUMN_PHONE, phone);
 
             db.insert(TABLE_USERS, null, values);
         } catch (Exception e) {
@@ -247,7 +251,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
 
-        String[] columns = {COLUMN_USERNAME, COLUMN_PASSWORD, COLUMN_FULLNAME, COLUMN_ADDRESS};
+        String[] columns = {COLUMN_USERNAME, COLUMN_PASSWORD, COLUMN_FULLNAME, COLUMN_ADDRESS, COLUMN_PHONE};
         String selection = COLUMN_USERNAME + " = ?";
         String[] selectionArgs = {username};
 
@@ -266,11 +270,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String password = cursor.getString(cursor.getColumnIndex(COLUMN_PASSWORD));
             String fullName = cursor.getString(cursor.getColumnIndex(COLUMN_FULLNAME));
             String address = cursor.getString(cursor.getColumnIndex(COLUMN_ADDRESS));
+            String phone = cursor.getString(cursor.getColumnIndex(COLUMN_PHONE));
 
             contentValues.put(COLUMN_USERNAME, fetchedUsername);
             contentValues.put(COLUMN_PASSWORD, password);
             contentValues.put(COLUMN_FULLNAME, fullName);
             contentValues.put(COLUMN_ADDRESS, address);
+            contentValues.put(COLUMN_PHONE, phone);
         }
 
         cursor.close();
@@ -281,13 +287,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public boolean updateUser(String username, String password, String fullName, String address) {
+    public boolean updateUser(String username, String password, String fullName, String address, String phone) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_USERNAME, username);
         values.put(COLUMN_PASSWORD, password);
         values.put(COLUMN_FULLNAME, fullName);
         values.put(COLUMN_ADDRESS, address);
+        values.put(COLUMN_PHONE, phone);
 
         // Update the user's profile in the database
         int rowsAffected = db.update(TABLE_USERS, values, COLUMN_USERNAME + "=?", new String[]{username});

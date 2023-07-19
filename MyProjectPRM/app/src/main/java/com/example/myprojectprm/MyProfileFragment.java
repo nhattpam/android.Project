@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 
 public class MyProfileFragment extends Fragment {
 
-    private EditText editTextUsername, editTextPassword, editTextFullName, editTextAddress;
+    private EditText editTextUsername, editTextPassword, editTextFullName, editTextAddress, editTextPhone;
     private Button buttonUpdateProfile;
 
     private String loggedInUsername;
@@ -27,6 +27,8 @@ public class MyProfileFragment extends Fragment {
     private static final String COLUMN_PASSWORD = "password";
     private static final String COLUMN_FULLNAME = "fullName";
     private static final String COLUMN_ADDRESS = "address";
+
+    private static final String COLUMN_PHONE = "phone";
 
     public MyProfileFragment() {
         // Required empty public constructor
@@ -46,6 +48,7 @@ public class MyProfileFragment extends Fragment {
         editTextPassword = view.findViewById(R.id.editTextPassword);
         editTextFullName = view.findViewById(R.id.editTextFullName);
         editTextAddress = view.findViewById(R.id.editTextAddress);
+        editTextPhone = view.findViewById(R.id.editTextPhone);
         buttonUpdateProfile = view.findViewById(R.id.btn_updateProfile);
 
         // Call the populateUserProfile method with the logged-in username
@@ -59,21 +62,22 @@ public class MyProfileFragment extends Fragment {
                 String password = editTextPassword.getText().toString();
                 String fullName = editTextFullName.getText().toString();
                 String address = editTextAddress.getText().toString();
+                String phone = editTextPhone.getText().toString();
 
                 // Call a method to update the user's profile using the DatabaseHelper
-                updateProfile(username, password, fullName, address);
+                updateProfile(username, password, fullName, address, phone);
             }
         });
 
         return view;
     }
     // Method to update the user's profile using the DatabaseHelper
-    private void updateProfile(String username, String password, String fullName, String address) {
+    private void updateProfile(String username, String password, String fullName, String address, String phone) {
 
         DatabaseHelper dbHelper = new DatabaseHelper(getContext());
 
         // Update the user's profile in the database
-        boolean isUpdated = dbHelper.updateUser(username, password, fullName, address);
+        boolean isUpdated = dbHelper.updateUser(username, password, fullName, address, phone);
 
         // Check if the profile update was successful
         if (isUpdated) {
@@ -94,11 +98,13 @@ public class MyProfileFragment extends Fragment {
             String password = profileData.getAsString(COLUMN_PASSWORD);
             String fullName = profileData.getAsString(COLUMN_FULLNAME);
             String address = profileData.getAsString(COLUMN_ADDRESS);
+            String phone = profileData.getAsString(COLUMN_PHONE);
 
             editTextUsername.setText(fetchedUsername);
             editTextPassword.setText(password);
             editTextFullName.setText(fullName);
             editTextAddress.setText(address);
+            editTextPhone.setText(phone);
         }
     }
 

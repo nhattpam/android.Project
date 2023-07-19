@@ -13,7 +13,7 @@ import android.widget.Toast;
 //Register: Khang
 public class RegistrationActivity extends AppCompatActivity {
 
-    private EditText etUsername, etPassword, etFullName, etAddress;
+    private EditText etUsername, etPassword, etFullName, etAddress, etPhone;
     private Button btnRegister;
 
     private TextView btnLogin;
@@ -30,6 +30,7 @@ public class RegistrationActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.et_password);
         etFullName = findViewById(R.id.et_fullName);
         etAddress = findViewById(R.id.et_address);
+        etPhone = findViewById(R.id.et_phone);
         btnRegister = findViewById(R.id.btn_register);
 
         //login button
@@ -44,13 +45,14 @@ public class RegistrationActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString();
                 String fullName = etFullName.getText().toString();
                 String address = etAddress.getText().toString();
+                String phone = etPhone.getText().toString();
 
-                if (username.isEmpty() || password.isEmpty() || fullName.isEmpty() || address.isEmpty()) {
+                if (username.isEmpty() || password.isEmpty() || fullName.isEmpty() || address.isEmpty() || phone.isEmpty()) {
                     Toast.makeText(RegistrationActivity.this, "Please enter all fields", Toast.LENGTH_SHORT).show();
                 } else if (databaseHelper.isUsernameExists(username)) {
                     Toast.makeText(RegistrationActivity.this, "Username already exists", Toast.LENGTH_SHORT).show();
                 } else {
-                    databaseHelper.addUser(username, password, fullName, address, RegistrationActivity.this);
+                    databaseHelper.addUser(username, password, fullName, address, phone, RegistrationActivity.this);
                     Toast.makeText(RegistrationActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
 //                    finish();
                 }
