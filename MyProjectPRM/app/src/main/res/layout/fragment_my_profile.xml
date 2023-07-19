@@ -24,6 +24,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="40dp"
         android:padding="12dp"
+        android:drawableLeft="@drawable/ic_my_username"
         android:background="@drawable/edittext_rounded_bg"
         android:textColorHint="#999999" />
 
@@ -36,6 +37,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="40dp"
         android:padding="12dp"
+        android:drawableLeft="@drawable/ic_my_password"
         android:background="@drawable/edittext_rounded_bg"
         android:textColorHint="#999999" />
 
@@ -48,6 +50,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="40dp"
         android:padding="12dp"
+        android:drawableLeft="@drawable/ic_my_fullname"
         android:background="@drawable/edittext_rounded_bg"
         android:textColorHint="#999999" />
 
@@ -60,6 +63,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="40dp"
         android:padding="12dp"
+        android:drawableLeft="@drawable/ic_my_address"
         android:background="@drawable/edittext_rounded_bg"
         android:textColorHint="#999999" />
 
@@ -72,6 +76,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="40dp"
         android:padding="12dp"
+        android:drawableLeft="@drawable/ic_my_phone"
         android:background="@drawable/edittext_rounded_bg"
         android:textColorHint="#999999" />
 
