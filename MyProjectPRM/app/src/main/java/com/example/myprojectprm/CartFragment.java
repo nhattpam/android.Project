@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,15 +35,23 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.razorpay.AutoReadOtpHelper;
+import com.razorpay.Checkout;
+import com.razorpay.PaymentResultListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import com.razorpay.PaymentResultListener;
 
 
-public class CartFragment extends Fragment {
+public class CartFragment extends Fragment  {
+    AutoReadOtpHelper autoReadOtpHelper;
     private static List<Cart> cartList;
     private RecyclerView recyclerView;
     private CartAdapter cartAdapter;
@@ -72,6 +81,10 @@ public class CartFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
+
+        // Initialize the AutoReadOtpHelper here
+        autoReadOtpHelper = new AutoReadOtpHelper(requireActivity());
+        
 
         retrieveSavedCartData();
 
@@ -128,22 +141,84 @@ public class CartFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                // Create a new instance of the BillFragment
-                BillFragment billFragment = new BillFragment();
-                // Pass the cart information and total price to the BillActivity
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("cartList", (Serializable) cartList);
-                bundle.putDouble("totalPrice", calculateTotalPrice());
-                bundle.putString("username", loggedInUsername);// Pass the username
-                billFragment.setArguments(bundle);
-                // Save the bill to the database
-                saveBillToDatabase();
-                // Replace the current fragment with the ProductDetailFragment
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.frame_container, billFragment)
-                        .addToBackStack(null) // Add the fragment to the back stack to enable back navigation
-                        .commit();
+//                // Create a new instance of the BillFragment
+//                BillFragment billFragment = new BillFragment();
+//                // Pass the cart information and total price to the BillActivity
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("cartList", (Serializable) cartList);
+//                bundle.putDouble("totalPrice", calculateTotalPrice());
+//                bundle.putString("username", loggedInUsername);// Pass the username
+//                billFragment.setArguments(bundle);
+//                // Save the bill to the database
+//                saveBillToDatabase();
+//                // Replace the current fragment with the ProductDetailFragment
+//                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+//                fragmentManager.beginTransaction()
+//                        .replace(R.id.frame_container, billFragment)
+//                        .addToBackStack(null) // Add the fragment to the back stack to enable back navigation
+//                        .commit();
+
+                // on below line we are getting
+                // amount that is entered by user.
+                String samount = String.valueOf(calculateTotalPrice());
+
+                // rounding off the amount.
+                int amount = Math.round(Float.parseFloat(samount) * 100);
+
+                // initialize Razorpay account.
+                Checkout checkout = new Checkout();
+
+                // set your id as below
+                checkout.setKeyID("rzp_test_pZeKh9EQhVbOtn");
+
+                // set image
+                checkout.setImage(R.drawable.logo_amazon);
+
+                // Create an instance of DatabaseHelper
+                DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
+
+// Get the user profile data from the database
+                ContentValues userContentValues = databaseHelper.populateUserProfile(loggedInUsername);
+                if (userContentValues != null) {
+                    String fullName = userContentValues.getAsString("fullName");
+                    String address = userContentValues.getAsString("address");
+                    String phone = userContentValues.getAsString("phone");
+                    Log.d("daylaten", fullName);
+                }
+
+                // initialize json object
+                JSONObject object = new JSONObject();
+                try {
+                    // to put name
+                    object.put("name", "Geeks for Geeks");
+
+                    // put description
+                    object.put("description", "Test payment");
+
+                    // to set theme color
+                    object.put("theme.color", "");
+
+                    // put the currency
+                    object.put("currency", "INR");
+
+                    // put amount
+                    object.put("amount", amount);
+
+                    // put mobile number
+                    object.put("prefill.contact", "9284064503");
+
+                    // put email
+                    object.put("prefill.email", "chaitanyamunje@gmail.com");
+
+                    // open razorpay to checkout activity
+                    checkout.open(requireActivity(), object);
+
+                    saveBillToDatabase();
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -289,6 +364,7 @@ public class CartFragment extends Fragment {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(requireContext());
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
+
 
 
 

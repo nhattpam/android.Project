@@ -25,11 +25,12 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.razorpay.PaymentResultListener;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PaymentResultListener {
 
     private BottomNavigationView bottomNavigationView;
     private FrameLayout frameContainer;
@@ -248,4 +249,40 @@ public class MainActivity extends AppCompatActivity {
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
+    @Override
+    public void onPaymentSuccess(String s) {
+        Log.d("DC", "OK ME ROI");
+        try {
+            navigateToBillFragment();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    private void navigateToBillFragment() {
+        // Create a new instance of the BillFragment
+        ProfileFragment billFragment = new ProfileFragment();
+
+        // Pass any required data to the BillFragment using arguments (if needed)
+        Bundle bundle = new Bundle();
+        bundle.putString("username", loggedInUsername);
+        // Add any other data to the bundle if needed
+        billFragment.setArguments(bundle);
+
+        // Postpone the fragment transaction until after the activity's state is saved
+        frameContainer.post(new Runnable() {
+            @Override
+            public void run() {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.frame_container, billFragment)
+                        .addToBackStack(null) // Add the fragment to the back stack to enable back navigation
+                        .commitAllowingStateLoss(); // Use commitAllowingStateLoss to prevent the IllegalStateException
+            }
+        });
+    }
+
+    @Override
+    public void onPaymentError(int i, String s) {
+
+    }
 }
